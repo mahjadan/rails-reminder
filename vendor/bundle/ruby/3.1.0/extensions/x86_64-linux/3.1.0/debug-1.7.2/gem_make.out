@@ -1,0 +1,16 @@
+current directory: /home/MOHAMOUD.ALJADAN/projects/test/rails-dev/rails-reminder/vendor/bundle/ruby/3.1.0/gems/debug-1.7.2/ext/debug
+/usr/share/rvm/rubies/ruby-3.1.1/bin/ruby -I /usr/share/rvm/rubies/ruby-3.1.1/lib/ruby/3.1.0 -r ./siteconf20230331-531923-1f8hcp.rb extconf.rb
+creating Makefile
+
+current directory: /home/MOHAMOUD.ALJADAN/projects/test/rails-dev/rails-reminder/vendor/bundle/ruby/3.1.0/gems/debug-1.7.2/ext/debug
+make DESTDIR\= clean
+
+current directory: /home/MOHAMOUD.ALJADAN/projects/test/rails-dev/rails-reminder/vendor/bundle/ruby/3.1.0/gems/debug-1.7.2/ext/debug
+make DESTDIR\=
+compiling debug.c
+compiling iseq_collector.c
+linking shared-object debug/debug.so
+
+current directory: /home/MOHAMOUD.ALJADAN/projects/test/rails-dev/rails-reminder/vendor/bundle/ruby/3.1.0/gems/debug-1.7.2/ext/debug
+make DESTDIR\= install
+/usr/bin/install -m 0755 debug.so ./.gem.20230331-531923-jnp167/debug
