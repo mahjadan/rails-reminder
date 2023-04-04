@@ -19,6 +19,8 @@ module RailsReminder
     # config.time_zone = "Central Time (US & Canada)"
     config.time_zone = "Brasilia"
 
+    config.active_job.queue_adapter = :sidekiq
+
     # config.eager_load_paths << Rails.root.join("extras")
   end
 end
