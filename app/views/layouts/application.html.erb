@@ -11,7 +11,12 @@
   <body>
     <div class="container">
       <div class="row">
-        <%= yield %>
+        <div class="col">
+          <%= yield %>
+        </div>
+        <div class="col">
+          <%= turbo_frame_tag "modal-frame" %>
+        </div>
       </div>
     </div>
   </body>

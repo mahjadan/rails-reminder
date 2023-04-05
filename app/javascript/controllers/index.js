@@ -9,3 +9,6 @@ application.register("hello", HelloController)
 
 import ReminderController from "./reminder_controller"
 application.register("reminder", ReminderController)
+
+import TurbomodalController from "./turbomodal_controller"
+application.register("turbomodal", TurbomodalController)

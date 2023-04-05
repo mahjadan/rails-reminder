@@ -3,20 +3,20 @@
     <strong>Title:</strong>
     <%= reminder.title %>
   </p>
-
   <p>
     <strong>Description:</strong>
     <%= reminder.description %>
   </p>
-
   <p>
     <strong>Due date:</strong>
     <%= reminder.due_date %>
   </p>
-
   <p>
     <strong>Repeat frequency:</strong>
     <%= reminder.repeat_frequency %>
   </p>
-
+  <p>
+    <%= link_to "Edit this reminder", edit_reminder_path(reminder),data:{ turbo_frame: "modal-frame"} %>
+    <%= button_to "Destroy this reminder", reminder, method: :delete , data: { turbo_frame: "_top" } %>
+  </p>
 </div>

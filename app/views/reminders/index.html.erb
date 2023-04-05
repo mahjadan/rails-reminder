@@ -1,11 +1,14 @@
 <p style="color: green"><%= notice %></p>
 <h1>Reminders</h1>
-<%= link_to "New reminder", new_reminder_path %>
+<%= link_to "New reminder", new_reminder_path, class: "btn btn-primary",
+data:{turbo_frame: "modal-frame"}
+%>
 <div id="reminders">
   <% @reminders.each do |reminder| %>
     <%= render reminder %>
-    <p>
-      <%= link_to "Show this reminder", reminder %>
-    </p>
+    <%# <p> %>
+    <%# <%= link_to "Edit this reminder", edit_reminder_path(reminder),data:{ turbo_frame: "modal"} %>
+    <%# button_to "Destroy this reminder", reminder, method: :delete , data: { turbo_frame: "_top" } %>
+    <%# </p> %>
   <% end %>
 </div>

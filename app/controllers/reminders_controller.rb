@@ -27,10 +27,16 @@ class RemindersController < ApplicationController
       if @reminder.save
         ReminderJob.perform_at(@reminder.due_date, @reminder.id)
         format.html { redirect_to reminder_url(@reminder), notice: "Reminder was successfully created." }
-        format.json { render :show, status: :created, location: @reminder }
+        # format.html { redirect_to reminders_path , notice: "Reminder was successfully created." }
+        # format.turbo_stream
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.prepend('reminders', partial: "reminders/reminder", locals: {reminder: @reminder})
+        end
+
+        # format.json { render :show, status: :created, location: @reminder }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @reminder.errors, status: :unprocessable_entity }
+        # format.json { render json: @reminder.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -39,6 +45,13 @@ class RemindersController < ApplicationController
   def update
     respond_to do |format|
       if @reminder.update(reminder_params)
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            @reminder,# here only replace the reminder no the whole list
+            partial: "reminders/reminder",
+            locals: { reminder: @reminder }
+          )
+        end
         format.html { redirect_to reminder_url(@reminder), notice: "Reminder was successfully updated." }
         format.json { render :show, status: :ok, location: @reminder }
       else

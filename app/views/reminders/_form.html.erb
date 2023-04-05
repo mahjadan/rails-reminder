@@ -1,36 +1,39 @@
 <%= form_with(model: reminder) do |form| %>
-  <% if reminder.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(reminder.errors.count, "error") %> prohibited this reminder from being saved:</h2>
-      <ul>
-        <% reminder.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+  <div class="modal-body">
+    <% if reminder.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(reminder.errors.count, "error") %> prohibited this reminder from being saved:</h2>
+        <ul>
+          <% reminder.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div>
+      <%= form.label :title, style: "display: block" %>
+      <%= form.text_field :title %>
     </div>
-  <% end %>
-  <div>
-    <%= form.label :title, style: "display: block" %>
-    <%= form.text_field :title %>
-  </div>
-  <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.text_area :description %>
-  </div>
-  <div>
-    <%= form.label :due_date, style: "display: block" %>
-    <%= form.datetime_local_field :due_date, :value => reminder.due_date.strftime('%Y-%m-%dT%H:%M') , class: "form-control", min: DateTime.now, step: 1 %>
-  </div>
-  <div >
-    <div class="raw" data-controller="reminder" >
-      <%= form.label "Repeat" %>
-      <input type = "checkbox" data-action="change->reminder#showRepeatFrequency" >
-      <div data-reminder-target="repeatFrequency" class="d-none">
-        <%= form.select :repeat_frequency, options_for_select(Reminder.repeat_frequencies.map { |repeat,_| [repeat.titleize, repeat] } )%>
+    <div>
+      <%= form.label :description, style: "display: block" %>
+      <%= form.text_area :description %>
+    </div>
+    <div>
+      <%= form.label :due_date, style: "display: block" %>
+      <%= form.datetime_local_field :due_date, :value => reminder.due_date.strftime('%Y-%m-%dT%H:%M') , class: "form-control", min: DateTime.now, step: 1 %>
+    </div>
+    <div >
+      <div class="raw" data-controller="reminder" >
+        <%= form.label "Repeat" %>
+        <input type = "checkbox" data-action="change->reminder#showRepeatFrequency" >
+        <div data-reminder-target="repeatFrequency" class="d-none">
+          <%= form.select :repeat_frequency, options_for_select(Reminder.repeat_frequencies.map { |repeat,_| [repeat.titleize, repeat] } )%>
+        </div>
       </div>
     </div>
   </div>
-  <div>
-    <%= form.submit %>
+  <div class="modal-footer">
+    <%= form.submit class:"btn btn-primary" %>
+    <%= link_to "cancel", reminders_path , data: { turbo_frame: "_top", bs: {dismiss: "modal"} }, class:"btn btn-secondary" %>
   </div>
 <% end %>
