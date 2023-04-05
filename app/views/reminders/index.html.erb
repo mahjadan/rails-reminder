@@ -1,7 +1,6 @@
 <p style="color: green"><%= notice %></p>
-
 <h1>Reminders</h1>
-
+<%= link_to "New reminder", new_reminder_path %>
 <div id="reminders">
   <% @reminders.each do |reminder| %>
     <%= render reminder %>
@@ -10,5 +9,3 @@
     </p>
   <% end %>
 </div>
-
-<%= link_to "New reminder", new_reminder_path %>

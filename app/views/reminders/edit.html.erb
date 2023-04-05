@@ -1,10 +1,10 @@
-<h1>Editing reminder</h1>
-
-<%= render "form", reminder: @reminder %>
-
-<br>
-
-<div>
-  <%= link_to "Show this reminder", @reminder %> |
-  <%= link_to "Back to reminders", reminders_path %>
-</div>
+<%= turbo_frame_tag @reminder do %>
+  <h1>Editing reminder</h1>
+  <%= render "form", reminder: @reminder %>
+  <br>
+  <div>
+    <%= link_to "Show this reminder", @reminder %> |
+    <%# to break out of the turbo frame use _top %>
+    <%= link_to "Back to reminders", reminders_path , data: { turbo_frame: "_top" } %>
+  </div>
+<% end %>

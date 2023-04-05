@@ -1,10 +1,10 @@
 <p style="color: green"><%= notice %></p>
-
-<%= render @reminder %>
-
-<div>
-  <%= link_to "Edit this reminder", edit_reminder_path(@reminder) %> |
-  <%= link_to "Back to reminders", reminders_path %>
-
-  <%= button_to "Destroy this reminder", @reminder, method: :delete %>
-</div>
+<%= turbo_frame_tag @reminder do %>
+  <%= render @reminder %>
+  <div>
+    <%= link_to "Edit this reminder", edit_reminder_path(@reminder) %> |
+    <%# to break out of the turbo frame use _top %>
+    <%= link_to "Back to reminders", reminders_path, data: { turbo_frame: "_top" } %>
+    <%= button_to "Destroy this reminder", @reminder, method: :delete , data: { turbo_frame: "_top" } %>
+  </div>
+<% end %>
