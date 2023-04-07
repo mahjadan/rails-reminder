@@ -1,7 +1,8 @@
 <p style="color: green"><%= notice %></p>
 <h1>Reminders</h1>
-<%= link_to "New reminder", new_reminder_path, class: "btn btn-primary",
-data:{turbo_frame: "modal-frame"}
+<%= link_to "New reminder", new_reminder_path,
+  class: "btn btn-primary",
+  data:{turbo_frame: "modal-frame"}
 %>
 <div id="reminders">
   <% @reminders.each do |reminder| %>

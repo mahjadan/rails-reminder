@@ -26,7 +26,7 @@ class RemindersController < ApplicationController
     respond_to do |format|
       if @reminder.save
         ReminderJob.perform_at(@reminder.due_date, @reminder.id)
-        format.html { redirect_to reminder_url(@reminder), notice: "Reminder was successfully created." }
+        # format.html { redirect_to reminder_url(@reminder), notice: "Reminder was successfully created." }
         # format.html { redirect_to reminders_path , notice: "Reminder was successfully created." }
         # format.turbo_stream
         format.turbo_stream do
