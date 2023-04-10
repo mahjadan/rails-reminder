@@ -18,3 +18,11 @@ Reminder.destroy_all
         repeat_frequency: 'no_repeat'
     )
 end
+
+User.create(email: 'mah@jadan.com',
+     password: 'password',
+     password_confirmation: 'password')
+
+User.create(email: 'mah2@jadan.com',
+     password: 'password',
+     password_confirmation: 'password')
