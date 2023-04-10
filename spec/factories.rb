@@ -1,4 +1,8 @@
 FactoryBot.define do
+  factory :user do
+    
+  end
+
   factory(:reminder) do
     title { Faker::Hobby.activity }
     description { Faker::Lorem.paragraph(sentence_count: 2) }
