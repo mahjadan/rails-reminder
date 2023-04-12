@@ -13,7 +13,8 @@ class RemindersController < ApplicationController
 
   # GET /reminders/new
   def new
-    @reminder = current_user.reminders.build(due_date: DateTime.now + 10.minutes )
+    @reminder = Reminder.new(due_date: DateTime.now + 10.minutes )
+    @reminder.user = current_user
   end
 
   # GET /reminders/1/edit
@@ -22,7 +23,10 @@ class RemindersController < ApplicationController
 
   # POST /reminders or /reminders.json
   def create
-    @reminder = current_user.reminders.build(reminder_params)
+    # @reminder = current_user.reminders.build(reminder_params)
+    @reminder = Reminder.new(reminder_params)
+    @reminder.user = current_user
+
 
     respond_to do |format|
       if @reminder.save
@@ -84,6 +88,6 @@ class RemindersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def reminder_params
-      params.require(:reminder).permit(:title, :description, :due_date, :repeat_frequency, :user_id)
+      params.require(:reminder).permit(:title, :description, :due_date, :repeat_frequency)
     end
 end
