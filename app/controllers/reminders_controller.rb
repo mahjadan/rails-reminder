@@ -1,4 +1,5 @@
 class RemindersController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_reminder, only: %i[ show edit update destroy ]
 
   # GET /reminders or /reminders.json
@@ -12,7 +13,7 @@ class RemindersController < ApplicationController
 
   # GET /reminders/new
   def new
-    @reminder = Reminder.new(due_date: DateTime.now + 10.minutes )
+    @reminder = current_user.reminders.build(due_date: DateTime.now + 10.minutes )
   end
 
   # GET /reminders/1/edit
@@ -21,11 +22,11 @@ class RemindersController < ApplicationController
 
   # POST /reminders or /reminders.json
   def create
-    @reminder = Reminder.new(reminder_params)
+    @reminder = current_user.reminders.build(reminder_params)
 
     respond_to do |format|
       if @reminder.save
-        ReminderJob.perform_at(@reminder.due_date, @reminder.id)
+        ReminderJob.perform_async(@reminder.id)
         # format.html { redirect_to reminder_url(@reminder), notice: "Reminder was successfully created." }
         # format.html { redirect_to reminders_path , notice: "Reminder was successfully created." }
         # format.turbo_stream
@@ -83,6 +84,6 @@ class RemindersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def reminder_params
-      params.require(:reminder).permit(:title, :description, :due_date, :repeat_frequency)
+      params.require(:reminder).permit(:title, :description, :due_date, :repeat_frequency, :user_id)
     end
 end

@@ -3,19 +3,20 @@ class ReminderJob
 
   def perform(reminder_id)
 
-    puts "run job with args: ' + #{reminder_id}"
-    begin
-      reminder = Reminder.find(reminder_id)
-      if reminder.repeat_frequency != 'no_repeat'
-        puts "schedualing job to #{reminder.repeat_frequency}"
+    puts "run reminder_job with args: ' + #{reminder_id}"
+    # ActionCable.server.broadcast 'notification_channel',{message: 'hello'}
+    reminder = Reminder.find(reminder_id)
+    # schedule notification
+    NotificationJob.perform_at(reminder.due_date, reminder.id)
+    if reminder.repeat_frequency != 'no_repeat'
+      puts "schedualing job to #{reminder.repeat_frequency}"
 
-        due_date = calculate_next_due_date(reminder.repeat_frequency, reminder.due_date)
-        reschedual_reminder(reminder,due_date)
-      end
-      true
-    rescue => e
-      false
+      due_date = calculate_next_due_date(reminder.repeat_frequency, reminder.due_date)
+      reschedual_reminder(reminder,due_date)
     end
+    true
+  rescue => e
+    false
   end
 
   private
