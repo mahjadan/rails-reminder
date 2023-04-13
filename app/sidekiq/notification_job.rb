@@ -17,12 +17,8 @@ class NotificationJob
   private
 
   def send_user_notification(reminder)
-    user = {
-      id: reminder.user.id,
-      email: reminder.user.email,
-      username: reminder.user.email.split('@')[0]
-    }
-    puts "calling notify_user : #{user}"
-    ActionCable.server.broadcast "notification_channel", {user:}
+    puts "calling notify_user : #{reminder}"
+    puts "notifying to thise channel : notification_channel_#{reminder.user.id}"
+    ActionCable.server.broadcast "notification_channel_#{reminder.user.id}", {reminder:}
   end
 end

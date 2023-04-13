@@ -12,22 +12,23 @@
     <% end %>
     <div>
       <%= form.label :title, style: "display: block" %>
-      <%= form.text_field :title %>
+      <%= form.text_field :title ,class:'form-control'%>
     </div>
     <div>
       <%= form.label :description, style: "display: block" %>
-      <%= form.text_area :description %>
+      <%= form.text_area :description ,class:'form-control'%>
     </div>
     <div>
       <%= form.label :due_date, style: "display: block" %>
-      <%= form.datetime_local_field :due_date, :value => reminder.due_date.strftime('%Y-%m-%dT%H:%M') , class: "form-control", min: DateTime.now, step: 1 %>
+      <%= form.datetime_local_field :due_date, :value => reminder.due_date.strftime('%Y-%m-%dT%H:%M') , class:'form-control', min: DateTime.now, step: 1 %>
     </div>
     <div >
       <div class="raw" data-controller="reminder" >
         <%= form.label "Repeat" %>
-        <input type = "checkbox" data-action="change->reminder#showRepeatFrequency" >
+        <input type = "checkbox"  data-action="change->reminder#showRepeatFrequency">
         <div data-reminder-target="repeatFrequency" class="d-none">
-          <%= form.select :repeat_frequency, options_for_select(Reminder.repeat_frequencies.map { |repeat,_| [repeat.titleize, repeat] } )%>
+          <%= form.select :repeat_frequency, options_for_select(Reminder.repeat_frequencies.map { |repeat,_| [repeat.titleize, repeat] }, class:'form-control')
+          %>
         </div>
       </div>
     </div>
