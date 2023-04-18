@@ -82,9 +82,15 @@ class RemindersController < ApplicationController
     @reminder = Reminder.find(params[:id])
     puts "complete #{@reminder.id} #{@reminder.title}"
     @reminder.update(complete: true)
-    format.turbo_stream do
-      render turbo_stream: turbo_stream.remove('notifications_div', partial: "reminders/notification",
-        locals: {reminder: @reminder})
+    # remove notification from both reminders and notifications_div
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.remove(
+          @reminder
+        ) + turbo_stream.remove(
+          helpers.dom_id(@reminder,:notification)# here only replace the reminder no the whole list
+        )
+      end
     end
   end
 

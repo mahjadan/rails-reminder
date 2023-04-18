@@ -1,4 +1,5 @@
 <% if user_signed_in? %>
+  <%= turbo_stream_from "reminders-stream-#{current_user.id}" %>
   <div class="col">
     <%= turbo_frame_tag "notifications_div" %>
   </div>
