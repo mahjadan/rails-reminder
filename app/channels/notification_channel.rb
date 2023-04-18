@@ -15,7 +15,7 @@ class NotificationChannel < ApplicationCable::Channel
     Turbo::StreamsChannel.broadcast_prepend_to(
       "reminders-stream",
       partial: "reminders/notification",
-      target: "notification_div",
+      target: "notifications_div",
       locals: {
         reminder: reminder
       }

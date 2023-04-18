@@ -1,16 +1,14 @@
-<%# <%= link_to edit_reminder_path(reminder),data:{ turbo_frame: "modal-frame"} do %> %>
-  <div id="<%= dom_id reminder %>">
-    <div class="card">
-      <div class="card-body">
-        <p>
-          <h2>
-            <%= reminder.due_date.to_datetime.hour%>
-            : <%= reminder.due_date.to_datetime.minute %>
-            <%= reminder.title %>
-          </h2>
-          <%= reminder.repeat_frequency %>
-        </p>
-      </div>
+<div id="<%= dom_id reminder %>">
+  <div class="card">
+    <div class="card-body">
+      <p>
+        <h2>
+          <%= reminder.due_date.to_datetime.hour%>
+          : <%= reminder.due_date.to_datetime.minute %>
+          <%= reminder.title %>
+        </h2>
+        <%= reminder.repeat_frequency %>
+      </p>
     </div>
   </div>
-  <%# <% end %> %>
+</div>

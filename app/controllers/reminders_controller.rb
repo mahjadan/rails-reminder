@@ -35,7 +35,8 @@ class RemindersController < ApplicationController
         # format.html { redirect_to reminders_path , notice: "Reminder was successfully created." }
         # format.turbo_stream
         format.turbo_stream do
-          render turbo_stream: turbo_stream.prepend('reminders', partial: "reminders/reminder", locals: {reminder: @reminder})
+          render turbo_stream: turbo_stream.prepend('reminders', partial: "reminders/reminder",
+             locals: {reminder: @reminder})
         end
 
         # format.json { render :show, status: :created, location: @reminder }
@@ -81,24 +82,26 @@ class RemindersController < ApplicationController
     @reminder = Reminder.find(params[:id])
     puts "complete #{@reminder.id} #{@reminder.title}"
     @reminder.update(complete: true)
+    format.turbo_stream do
+      render turbo_stream: turbo_stream.remove('notifications_div', partial: "reminders/notification",
+        locals: {reminder: @reminder})
+    end
   end
 
   def snooze
     puts "SNOOZE params #{params}"
     @reminder = Reminder.find(params[:id])
     puts "SNOOZE #{@reminder.id} #{@reminder.title}"
-    # render :edit
-    #  edit_reminder_path(reminder),data:{ turbo_frame: "modal-frame"}
-    respond_to do |format|
-      format.turbo_stream do
-          render turbo_stream: turbo_stream.replace(
-            @reminder,# here only replace the reminder no the whole list
-            partial: "reminders/form",
-            target: "modal-frame",
-            locals: { reminder: @reminder }
-          )
-      end
-    end
+    # respond_to do |format|
+    #   format.turbo_stream do
+    #       render turbo_stream: turbo_stream.replace(
+    #         @reminder,# here only replace the reminder no the whole list
+    #         partial: "reminders/form",
+    #         target: "modal-frame",
+    #         locals: { reminder: @reminder }
+    #       )
+    #   end
+    # end
   end
 
   private
