@@ -9,6 +9,7 @@ class NotificationChannel < ApplicationCable::Channel
   end
   # this method can be called from notification_channel.js (front end js)
   def rb_notify(data)
+    reminder_model = Reminder.new(data['reminder'])
     puts "create reminder_model : #{reminder_model}"
 
     Turbo::StreamsChannel.broadcast_prepend_to(
