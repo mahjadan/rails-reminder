@@ -76,6 +76,31 @@ class RemindersController < ApplicationController
     end
   end
 
+  def complete
+    puts "complete params #{params}"
+    @reminder = Reminder.find(params[:id])
+    puts "complete #{@reminder.id} #{@reminder.title}"
+    @reminder.update(complete: true)
+  end
+
+  def snooze
+    puts "SNOOZE params #{params}"
+    @reminder = Reminder.find(params[:id])
+    puts "SNOOZE #{@reminder.id} #{@reminder.title}"
+    # render :edit
+    #  edit_reminder_path(reminder),data:{ turbo_frame: "modal-frame"}
+    respond_to do |format|
+      format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            @reminder,# here only replace the reminder no the whole list
+            partial: "reminders/form",
+            target: "modal-frame",
+            locals: { reminder: @reminder }
+          )
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_reminder

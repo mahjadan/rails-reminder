@@ -1,0 +1,20 @@
+<div id="<%= dom_id(reminder,:notification) %>">
+  <div class="card">
+    <div class="card-body">
+      <p>
+        <h2>
+          <%= reminder.due_date.to_datetime.hour %>
+          : <%= reminder.due_date.to_datetime.minute %>
+          <%= reminder.title %>
+        </h2>
+        <%= reminder.repeat_frequency %>
+      </p>
+      <%= form_with url: snooze_reminder_path(reminder), method: :post do |form| %>
+        <%# <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <%# <%= button_to "Snooze", snooze_reminder_path(reminder), method: :post, class: 'btn btn-primary', data: { turbo: false }, authenticity_token: true %>
+        <%= form.button "Complete", formaction: complete_reminder_path(reminder.id), method: :post, class: "btn btn-secondary", data: { turbo_frame: "_top" }, authenticity_token: true %>
+        <%= form.button "Snooze", class: 'btn btn-primary' %>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,8 @@
 <% if user_signed_in? %>
-  <div class="raw" id="user-notifications" data-user-id=<%= current_user.id %> >
+  <%= turbo_stream_from "user-notifications-stream" %>
+  <div class="user-notifications"  >
   </div>
-  <div> Welcome <%= current_user.email %> </div>
+  <div id="user-notifications" data-user-id=<%= current_user.id %>> Welcome <%= current_user.email %> </div>
   <%= button_to "Sign out", destroy_user_session_path, method: :delete %>
 <% else %>
   <%= button_to "Sign in", new_user_session_path %>
@@ -13,10 +14,12 @@
 %>
 <div id="reminders">
   <% @reminders.each do |reminder| %>
-    <%= render reminder %>
-    <%# <p> %>
-    <%# <%= link_to "Edit this reminder", edit_reminder_path(reminder),data:{ turbo_frame: "modal"} %>
-    <%# button_to "Destroy this reminder", reminder, method: :delete , data: { turbo_frame: "_top" } %>
-    <%# </p> %>
+    <%= link_to edit_reminder_path(reminder),data:{ turbo_frame: "modal-frame"} do %>
+      <%= render reminder %>
+    <% end %>
+    <p>
+      <%#= link_to "Edit this reminder", edit_reminder_path(reminder),data:{ turbo_frame: "modal"} %>
+      <%= button_to "Destroy this reminder", reminder, method: :delete , data: { turbo_frame: "_top" } %>
+    </p>
   <% end %>
 </div>
