@@ -4,8 +4,12 @@ class RemindersController < ApplicationController
 
   # GET /reminders or /reminders.json
   def index
-    @reminders = current_user.reminders.chronological.group_by { |r| r.due_date.to_date }.sort_by { |date, _| date }.to_h
-
+    today = Date.current
+    tomorrow = today + 1.day
+    reminders = current_user.reminders.after(DateTime.now)
+    @today_reminders = reminders.select { |r| r.due_date.to_date == today }
+    @tomorrow_reminders = reminders.select { |r| r.due_date.to_date == tomorrow }
+    @upcoming_reminders = reminders.reject { |r| [today, tomorrow].include?(r.due_date.to_date) }
   end
 
   # GET /reminders/1 or /reminders/1.json
@@ -24,26 +28,23 @@ class RemindersController < ApplicationController
 
   # POST /reminders or /reminders.json
   def create
-    # @reminder = current_user.reminders.build(reminder_params)
     @reminder = Reminder.new(reminder_params)
     @reminder.user = current_user
-
 
     respond_to do |format|
       if @reminder.save
         ReminderJob.perform_async(@reminder.id)
-        # format.html { redirect_to reminder_url(@reminder), notice: "Reminder was successfully created." }
-        # format.html { redirect_to reminders_path , notice: "Reminder was successfully created." }
-        # format.turbo_stream
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.prepend('reminders', partial: "reminders/reminder",
-             locals: {reminder: @reminder})
+        @reminder.due_date.to_date == Date.today ? "today-reminders" : "tomorrow-reminders"
+        if @reminder.due_date.to_date == Date.today
+          @target = "today-reminders"
+        elsif @reminder.due_date.to_date == Date.tomorrow
+          @target = "tomorrow-reminders"
+        else
+          @target = "upcoming-reminders"
         end
-
-        # format.json { render :show, status: :created, location: @reminder }
+        format.turbo_stream
       else
         format.html { render :new, status: :unprocessable_entity }
-        # format.json { render json: @reminder.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -52,7 +53,9 @@ class RemindersController < ApplicationController
   def update
     @reminder.assign_attributes(reminder_params)
     if @reminder.due_date_changed? || @reminder.repeat_frequency_changed?
-      # delete and recreate just like the update_snooze process
+      # delete and recreate just like the update_snooze process 
+
+      
       puts "delte the createeeeeeeeee"
     else
       # update
@@ -63,15 +66,8 @@ class RemindersController < ApplicationController
     puts "title changed: #{@reminder.title_change}"
     respond_to do |format|
       if @reminder.update(reminder_params)
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace(
-            @reminder,# here only replace the reminder no the whole list
-            partial: "reminders/reminder",
-            locals: { reminder: @reminder }
-          )
-        end
-        format.html { redirect_to reminder_url(@reminder), notice: "Reminder was successfully updated." }
-        format.json { render :show, status: :ok, location: @reminder }
+        format.turbo_stream
+
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @reminder.errors, status: :unprocessable_entity }

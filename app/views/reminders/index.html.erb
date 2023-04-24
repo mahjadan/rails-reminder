@@ -14,16 +14,29 @@
   data:{turbo_frame: "modal-frame"}
 %>
 <div id="reminders">
-  <% @reminders.each do |date, reminders| %>
-    <h2><%= date.strftime('%A, %B %d') %></h2>
-    <ul>
-      <% reminders.each do |reminder| %>
-        <%= render reminder %>
-        <p>
-          <%#= link_to "Edit this reminder", edit_reminder_path(reminder),data:{ turbo_frame: "modal"} %>
-          <%= button_to "Destroy this reminder", reminder, method: :delete , data: { turbo_frame: "_top" } %>
-        </p>
+  <h2 >Today</h2>
+  <ul id="today-reminders" >
+    <% if @today_reminders.present? %>
+      <% @today_reminders.each do |reminder| %>
+        <%= render partial: "reminder", locals: {reminder: reminder} %>
       <% end %>
-    </ul>
-  <% end %>
+    <% end %>
+  </ul>
+  <h2 class="tomorrow-reminders"
+>Tomorrow</h2>
+  <ul id="tomorrow-reminders" >
+    <% if @tomorrow_reminders.present? %>
+      <% @tomorrow_reminders.each do |reminder| %>
+        <%= render partial: "reminder" , locals: {reminder: reminder} %>
+      <% end %>
+    <% end %>
+  </ul>
+  <h2 >Upcoming</h2>
+  <ul id="upcoming-reminders">
+    <% if @upcoming_reminders.present? %>
+      <% @upcoming_reminders.each do |reminder| %>
+        <%= render partial: "reminderindex", locals: {reminder: reminder} %>
+      <% end %>
+    <% end %>
+  </ul>
 </div>
