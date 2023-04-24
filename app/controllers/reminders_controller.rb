@@ -1,10 +1,11 @@
 class RemindersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_reminder, only: %i[ show edit update destroy ]
+  before_action :set_reminder, only: %i[ show edit update destroy snooze ]
 
   # GET /reminders or /reminders.json
   def index
-    @reminders = current_user.reminders
+    @reminders = current_user.reminders.chronological.group_by { |r| r.due_date.to_date }.sort_by { |date, _| date }.to_h
+
   end
 
   # GET /reminders/1 or /reminders/1.json
@@ -49,6 +50,17 @@ class RemindersController < ApplicationController
 
   # PATCH/PUT /reminders/1 or /reminders/1.json
   def update
+    @reminder.assign_attributes(reminder_params)
+    if @reminder.due_date_changed? || @reminder.repeat_frequency_changed?
+      # delete and recreate just like the update_snooze process
+      puts "delte the createeeeeeeeee"
+    else
+      # update
+      puts "updatingggggggggggggggg"
+    end
+    puts "update PARAMS: #{reminder_params}"
+    puts "title changed: #{@reminder.title_changed?}"
+    puts "title changed: #{@reminder.title_change}"
     respond_to do |format|
       if @reminder.update(reminder_params)
         format.turbo_stream do
@@ -77,6 +89,7 @@ class RemindersController < ApplicationController
     end
   end
 
+  # POST /reminders/1/complete
   def complete
     puts "complete params #{params}"
     @reminder = Reminder.find(params[:id])
@@ -94,20 +107,43 @@ class RemindersController < ApplicationController
     end
   end
 
+  # GET /reminders/1/snooze
   def snooze
-    puts "SNOOZE params #{params}"
-    @reminder = Reminder.find(params[:id])
-    puts "SNOOZE #{@reminder.id} #{@reminder.title}"
-    # respond_to do |format|
-    #   format.turbo_stream do
-    #       render turbo_stream: turbo_stream.replace(
-    #         @reminder,# here only replace the reminder no the whole list
-    #         partial: "reminders/form",
-    #         target: "modal-frame",
-    #         locals: { reminder: @reminder }
-    #       )
-    #   end
-    # end
+    # already using set_reminder
+  end
+
+    # POST /reminders/1/update_snooze
+  def update_snooze
+    puts "SNOOZE POST params #{params}"
+    puts "mintues: #{params[:minutes].to_i}"
+    old_reminder = Reminder.find(params[:id])
+    new_due_date = DateTime.now + params[:minutes].to_i.minutes
+    puts "new_due_date: #{new_due_date}"
+    # check if the new_due_date is still older than now
+    # or render unprocessable_entity but with 
+    @reminder = Reminder.new(old_reminder.attributes.except("id").merge(due_date: new_due_date))
+    respond_to do |format|
+      if @reminder.save
+        puts "id: #{@reminder.id}, due_date: #{@reminder.due_date}, title: #{@reminder.title}"
+        old_reminder.destroy
+        ReminderJob.perform_async(@reminder.id)
+        # format.html { redirect_to reminder_url(@reminder), notice: "Reminder was successfully created." }
+        # format.html { redirect_to reminders_path , notice: "Reminder was successfully created." }
+        format.turbo_stream do
+          # replace the new reminder in the reminders list
+          # render turbo_stream: []
+          render turbo_stream: [
+            # turbo_stream.prepend('reminders', partial: "reminders/reminder",locals: {reminder: @reminder}),
+            # remove the old reminder from notification
+            # turbo_stream.remove(old_reminder),
+            turbo_stream.remove(helpers.dom_id(old_reminder,:notification)),
+            turbo_stream.replace(old_reminder, partial: "reminders/reminder",locals: {reminder: @reminder})
+          ]
+        end
+      else
+        format.html { render :snooze, status: :unprocessable_entity }
+      end
+    end
   end
 
   private

@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     member {
       post  'complete'
       get 'snooze'
+      post 'update_snooze'
      }
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

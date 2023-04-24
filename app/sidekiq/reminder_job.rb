@@ -4,7 +4,6 @@ class ReminderJob
   def perform(reminder_id)
 
     puts "run reminder_job with args: ' + #{reminder_id}"
-    # ActionCable.server.broadcast 'notification_channel',{message: 'hello'}
     reminder = Reminder.find(reminder_id)
     # schedule notification
     NotificationJob.perform_at(reminder.due_date, reminder.id)

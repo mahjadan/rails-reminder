@@ -14,13 +14,16 @@
   data:{turbo_frame: "modal-frame"}
 %>
 <div id="reminders">
-  <% @reminders.each do |reminder| %>
-    <%= link_to edit_reminder_path(reminder),data:{ turbo_frame: "modal-frame"} do %>
-      <%= render reminder %>
-    <% end %>
-    <p>
-      <%#= link_to "Edit this reminder", edit_reminder_path(reminder),data:{ turbo_frame: "modal"} %>
-      <%= button_to "Destroy this reminder", reminder, method: :delete , data: { turbo_frame: "_top" } %>
-    </p>
+  <% @reminders.each do |date, reminders| %>
+    <h2><%= date.strftime('%A, %B %d') %></h2>
+    <ul>
+      <% reminders.each do |reminder| %>
+        <%= render reminder %>
+        <p>
+          <%#= link_to "Edit this reminder", edit_reminder_path(reminder),data:{ turbo_frame: "modal"} %>
+          <%= button_to "Destroy this reminder", reminder, method: :delete , data: { turbo_frame: "_top" } %>
+        </p>
+      <% end %>
+    </ul>
   <% end %>
 </div>

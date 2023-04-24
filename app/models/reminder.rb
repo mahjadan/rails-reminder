@@ -6,6 +6,10 @@ class Reminder < ApplicationRecord
 
     belongs_to :user
 
+    scope :chronological, -> { order(due_date: :asc) }
+    scope :active, -> { where(complete: false) }
+    scope :coming, -> { where("due_date > ?", DateTime.now) }
+
     def due_date_cannot_be_in_the_past
         if due_date.present? && due_date < DateTime.now
             errors.add(:due_date, 'can not be in the past')
