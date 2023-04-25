@@ -1,0 +1,6 @@
+<%= turbo_stream.remove(dom_id(@old_reminder,:notification)) %>
+<%= turbo_stream.replace(
+    @old_reminder,
+    partial: "reminders/reminder",
+    locals: {reminder: @reminder}
+  )  %>

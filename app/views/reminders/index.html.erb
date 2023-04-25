@@ -35,7 +35,7 @@
   <ul id="upcoming-reminders">
     <% if @upcoming_reminders.present? %>
       <% @upcoming_reminders.each do |reminder| %>
-        <%= render partial: "reminderindex", locals: {reminder: reminder} %>
+        <%= render partial: "reminder", locals: {reminder: reminder} %>
       <% end %>
     <% end %>
   </ul>
