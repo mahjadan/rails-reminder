@@ -91,18 +91,14 @@ class RemindersController < ApplicationController
 
   # POST /reminders/1/complete
   def complete
-    puts "complete params #{params}"
     @reminder = Reminder.find(params[:id])
-    puts "complete #{@reminder.id} #{@reminder.title}"
-    @reminder.update(complete: true)
-    # remove notification from both reminders and notifications_div
+
     respond_to do |format|
-      format.turbo_stream do
-        render turbo_stream: turbo_stream.remove(
-          @reminder
-        ) + turbo_stream.remove(
-          helpers.dom_id(@reminder, :notification) # here only replace the reminder no the whole list
-        )
+      if @reminder.update_attribute('complete', true)
+        format.turbo_stream
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @reminder.errors, status: :unprocessable_entity }
       end
     end
   end
