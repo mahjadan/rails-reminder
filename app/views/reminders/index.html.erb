@@ -1,46 +1,52 @@
-<% if user_signed_in? %>
-  <%= turbo_stream_from "reminders-stream-#{current_user.id}" %>
-  <div class="col">
-    <%= turbo_frame_tag "notifications_div" do %>
-      <% @notification_reminders.each do |reminder| %>
-        <%= render partial: "reminders/notification", locals:{reminder: reminder} %>
+<main class="container">
+  <div class="col-md-6 offset-md-3">
+    <div class="d-flex justify-content-between align-items-center my-4">
+      <% if user_signed_in? %>
+        <%= turbo_stream_from "reminders-stream-#{current_user.id}" %>
+        <div class="col">
+          <%= turbo_frame_tag "notifications_div" do %>
+            <% @notification_reminders.each do |reminder| %>
+              <%= render partial: "reminders/notification", locals:{reminder: reminder} %>
+            <% end %>
+          <% end %>
+        </div>
+        <div id="user-notifications" data-user-id=<%= current_user.id %>> Welcome <%= current_user.email %> </div>
+        <%= button_to "Sign out", destroy_user_session_path, method: :delete %>
+      <% else %>
+        <%= button_to "Sign in", new_user_session_path %>
       <% end %>
-    <% end %>
-  </div>
-  <div id="user-notifications" data-user-id=<%= current_user.id %>> Welcome <%= current_user.email %> </div>
-  <%= button_to "Sign out", destroy_user_session_path, method: :delete %>
-<% else %>
-  <%= button_to "Sign in", new_user_session_path %>
-<% end %>
-<h1>Reminders</h1>
-<%= link_to "New reminder", new_reminder_path,
+      <h1>Reminders</h1>
+      <%= link_to "New reminder", new_reminder_path,
   class: "btn btn-primary",
   data:{turbo_frame: "modal-frame"}
 %>
-<div id="reminders">
-  <h2 >Today</h2>
-  <ul id="today-reminders" >
-    <% if @today_reminders.present? %>
-      <% @today_reminders.each do |reminder| %>
-        <%= render partial: "reminder", locals: {reminder: reminder} %>
-      <% end %>
-    <% end %>
-  </ul>
-  <h2 class="tomorrow-reminders"
+      <div id="reminders" class="d-flex flex-column gap-3">
+        <h2 >Today</h2>
+        <ul id="today-reminders" >
+          <% if @today_reminders.present? %>
+            <% @today_reminders.each do |reminder| %>
+              <%= render partial: "reminder", locals: {reminder: reminder} %>
+            <% end %>
+          <% end %>
+        </ul>
+        <h2 class="tomorrow-reminders"
 >Tomorrow</h2>
-  <ul id="tomorrow-reminders" >
-    <% if @tomorrow_reminders.present? %>
-      <% @tomorrow_reminders.each do |reminder| %>
-        <%= render partial: "reminder" , locals: {reminder: reminder} %>
-      <% end %>
-    <% end %>
-  </ul>
-  <h2 >Upcoming</h2>
-  <ul id="upcoming-reminders">
-    <% if @upcoming_reminders.present? %>
-      <% @upcoming_reminders.each do |reminder| %>
-        <%= render partial: "reminder", locals: {reminder: reminder} %>
-      <% end %>
-    <% end %>
-  </ul>
-</div>
+        <ul id="tomorrow-reminders" >
+          <% if @tomorrow_reminders.present? %>
+            <% @tomorrow_reminders.each do |reminder| %>
+              <%= render partial: "reminder" , locals: {reminder: reminder} %>
+            <% end %>
+          <% end %>
+        </ul>
+        <h2 >Upcoming</h2>
+        <ul id="upcoming-reminders">
+          <% if @upcoming_reminders.present? %>
+            <% @upcoming_reminders.each do |reminder| %>
+              <%= render partial: "reminder", locals: {reminder: reminder} %>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>

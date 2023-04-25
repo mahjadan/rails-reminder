@@ -20,8 +20,17 @@
         <div class="col">
           <%= yield %>
         </div>
-        <div class="col">
-          <%= turbo_frame_tag "modal-frame" %>
+        <div
+            class="modal"
+            tabindex="-1"
+            data-controller="turbomodal"
+            data-action="turbo:frame-load->turbomodal#open turbo:submit-end->turbomodal#close"
+          >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <%= turbo_frame_tag "modal-frame" %>
+            </div>
+          </div>
         </div>
       </div>
     </div>

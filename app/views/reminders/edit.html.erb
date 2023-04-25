@@ -1,6 +1,10 @@
-<%= turbo_frame_tag "modal-frame" do %>
-  <div data-controller="turbomodal" data-action="turbo:submit-end->turbomodal#submitEnd">
-    <h1>Editing reminder</h1>
-    <%= render "form", reminder: @reminder %>
-  </div>
-<% end %>
+<main class="container">
+  <%= turbo_frame_tag "modal-frame" do %>
+    <h1 class="h3 modal-header">
+      Editing reminder
+    </h1>
+    <div class="modal-body">
+      <%= render "form", reminder: @reminder %>
+    </div>
+  <% end %>
+</main>

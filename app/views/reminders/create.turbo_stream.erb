@@ -1,7 +1,3 @@
-<li  class="list-unstyled">
   <%= turbo_stream.prepend(target_div_id_for_reminder(@reminder), partial: "reminders/reminder",
       locals: {reminder: @reminder}) %>
-  <p>
-  </li>
-  <%= button_to "Destroy this reminder", @reminder, method: :delete , data: { turbo_frame: "_top" } %>
-</p>
+<p>

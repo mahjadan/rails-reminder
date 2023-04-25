@@ -1,20 +1,22 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
+import * as bootstrap from "bootstrap";
 
 // Connects to data-controller="turbomodal"
 export default class extends Controller {
   connect() {
-        console.log('modal controller connected');
+    console.log('turbomodal controller connected');
+    this.modal = new bootstrap.Modal(this.element)
   }
 
-  submitEnd(event) {
-    console.log(event);
-    console.log(event.detail.success);
-    if (event.detail.success) {
-      this.hideModal()
+  open() {
+    if (!this.modal.isOpened) {
+      this.modal.show()
     }
   }
 
-  hideModal(event) {
-    this.element.remove()
+  close(event) {
+    if (event.detail.success) {
+      this.modal.hide()
+    }
   }
 }
