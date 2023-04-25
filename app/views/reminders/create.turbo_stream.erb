@@ -1,5 +1,5 @@
 <li  class="list-unstyled">
-  <%= turbo_stream.prepend(@target, partial: "reminders/reminder",
+  <%= turbo_stream.prepend(target_div_id_for_reminder(@reminder), partial: "reminders/reminder",
       locals: {reminder: @reminder}) %>
   <p>
   </li>

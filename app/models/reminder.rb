@@ -8,7 +8,8 @@ class Reminder < ApplicationRecord
 
     scope :chronological, -> { order(due_date: :asc) }
     scope :active, -> { where(complete: false) }
-    scope :after, -> (date) { where("due_date > ?", date).chronological }
+    scope :after, -> (date) { where("due_date > ?", date).chronological.active }
+    scope :before, -> (date) { where("due_date < ?", date).chronological.active }
 
     def due_date_cannot_be_in_the_past
         if due_date.present? && due_date < DateTime.now

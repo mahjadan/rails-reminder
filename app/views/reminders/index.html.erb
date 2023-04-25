@@ -1,7 +1,11 @@
 <% if user_signed_in? %>
   <%= turbo_stream_from "reminders-stream-#{current_user.id}" %>
   <div class="col">
-    <%= turbo_frame_tag "notifications_div" %>
+    <%= turbo_frame_tag "notifications_div" do %>
+      <% @notification_reminders.each do |reminder| %>
+        <%= render partial: "reminders/notification", locals:{reminder: reminder} %>
+      <% end %>
+    <% end %>
   </div>
   <div id="user-notifications" data-user-id=<%= current_user.id %>> Welcome <%= current_user.email %> </div>
   <%= button_to "Sign out", destroy_user_session_path, method: :delete %>

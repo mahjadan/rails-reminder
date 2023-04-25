@@ -10,6 +10,8 @@ class RemindersController < ApplicationController
     @today_reminders = reminders.select { |r| r.due_date.to_date == today }
     @tomorrow_reminders = reminders.select { |r| r.due_date.to_date == tomorrow }
     @upcoming_reminders = reminders.reject { |r| [today, tomorrow].include?(r.due_date.to_date) }
+    # create vaiable notification_reminders to list all past due reminders that are not completed of the current_user and send it to the view
+    @notification_reminders = current_user.reminders.before(DateTime.now)
   end
 
   # GET /reminders/1 or /reminders/1.json
@@ -32,14 +34,6 @@ class RemindersController < ApplicationController
     respond_to do |format|
       if @reminder.save
         ReminderJob.perform_async(@reminder.id)
-        @reminder.due_date.to_date == Date.today ? 'today-reminders' : 'tomorrow-reminders'
-        @target = if @reminder.due_date.to_date == Date.today
-                    'today-reminders'
-                  elsif @reminder.due_date.to_date == Date.tomorrow
-                    'tomorrow-reminders'
-                  else
-                    'upcoming-reminders'
-                  end
         format.turbo_stream
       else
         format.html { render :new, status: :unprocessable_entity }
