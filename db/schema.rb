@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_18_121903) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_18_121637) do
   create_table "reminders", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -19,7 +19,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_18_121903) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "user_id"
-    t.boolean "complete"
+    t.boolean "complete", default: false, null: false
     t.index ["repeat_frequency"], name: "index_reminders_on_repeat_frequency"
   end
 

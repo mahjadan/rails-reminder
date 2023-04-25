@@ -1,5 +1,5 @@
 class AddCompleteToReminders < ActiveRecord::Migration[7.0]
   def change
-    add_column :reminders, :complete, :boolean
+    add_column :reminders, :complete, :boolean, :default => false, :null => false
   end
 end
