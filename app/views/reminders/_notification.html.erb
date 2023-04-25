@@ -3,8 +3,7 @@
     <div class="card-body">
       <p>
         <h2>
-          <%= reminder.due_date.to_datetime.hour %>
-          : <%= reminder.due_date.to_datetime.minute %>
+          <%= format_24_hour(reminder.due_date)%>
           <%= reminder.title %>
         </h2>
         <%= reminder.repeat_frequency %>

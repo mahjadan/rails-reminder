@@ -17,6 +17,11 @@ module RemindersHelper
         'upcoming-reminders'
     end
 
+    # Format the time to be a 24 hour time string
+    def format_24_hour(time)
+        time.strftime("%H:%M")
+    end
+
     private
     def today?(reminder)
         Date.today == reminder.due_date.to_date
