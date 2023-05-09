@@ -121,7 +121,7 @@ class RemindersController < ApplicationController
         puts "id: #{@reminder.id}, due_date: #{@reminder.due_date}, title: #{@reminder.title}"
         @old_reminder.destroy
         ReminderJob.perform_async(@reminder.id)
-        format.turbo_stream
+        format.turbo_stream { flash.now[:notice] = "Reminder was successfully snoozed." }
         format.html { redirect_to reminders_path , notice: "Reminder was successfully created." }
         format.html { redirect_to reminder_url(@reminder), notice: "Reminder was successfully created." }
       else
