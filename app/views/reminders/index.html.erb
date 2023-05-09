@@ -1,7 +1,7 @@
 <div class="container my-4">
   <%= render partial: "nav", locals:{email: current_user.email}%>
-  <%= render partial: "notification_list", locals:{notification_reminders: @notification_reminders}%>
-  <h1>Reminders</h1>
+  <%= render partial: "notification_list",
+  locals:{notification_reminders: @notification_reminders} %>
   <div class="col-md-4">
     <div class="card mb-3">
       <div class="card-body">
@@ -12,32 +12,52 @@
       </div>
     </div>
   </div>
-  <div id="reminders" class="col-6">
-    <h2 >Today</h2>
-    <ul id="today-reminders" >
-      <% if @today_reminders.present? %>
-        <% @today_reminders.each do |reminder| %>
-          <%= render partial: "reminder", locals: {reminder: reminder} %>
-        <% end %>
-      <% end %>
-    </ul>
-    <h2 class="tomorrow-reminders">
-      Tomorrow
-    </h2>
-    <ul id="tomorrow-reminders" >
-      <% if @tomorrow_reminders.present? %>
-        <% @tomorrow_reminders.each do |reminder| %>
-          <%= render partial: "reminder" , locals: {reminder: reminder} %>
-        <% end %>
-      <% end %>
-    </ul>
-    <h2 >Upcoming</h2>
-    <ul id="upcoming-reminders">
-      <% if @upcoming_reminders.present? %>
-        <% @upcoming_reminders.each do |reminder| %>
-          <%= render partial: "reminder", locals: {reminder: reminder} %>
-        <% end %>
-      <% end %>
-    </ul>
+  <div class="row">
+    <div class="col-md-12">
+      <h2 class="h6 mb-0">Reminder List</h2>
+      <hr />
+    </div>
   </div>
-</div>
+  <div class="row" id="reminders">
+    <div class="col-md-4">
+      <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white">
+          <h2 class="h5 mb-0">Today_new</h2>
+        </div>
+        <ul class="list-group list-group-flush" id="today-reminders">
+          <% if @today_reminders.present? %>
+            <% @today_reminders.each do |reminder| %>
+              <%= render partial: "reminder", locals: {reminder: reminder} %>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow mb-4" >
+        <div class="card-header bg-secondary text-white">
+          <h2 class="h5 mb-0">Tomorrow</h2>
+        </div>
+        <ul class="list-group list-group-flush" id="tomorrow-reminders">
+          <% if @tomorrow_reminders.present? %>
+            <% @tomorrow_reminders.each do |reminder| %>
+              <%= render partial: "reminder", locals: {reminder: reminder} %>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow mb-4">
+        <div class="card-header bg-info text-white">
+          <h2 class="h5 mb-0">Upcoming</h2>
+        </div>
+        <ul class="list-group list-group-flush" id="upcoming-reminders">
+          <% if @upcoming_reminders.present? %>
+            <% @upcoming_reminders.each do |reminder| %>
+              <%= render partial: "reminder", locals: {reminder: reminder} %>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
+    </div>

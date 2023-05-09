@@ -36,7 +36,10 @@ class ReminderJob
   end
 
   def reschedual_reminder(reminder, due_date)
+    #TODO: check if update is sucessfull then schedule the job
+    puts "reschedualing reminder to #{due_date}"
     reminder.update(due_date: due_date)
     ReminderJob.perform_at(reminder.due_date, reminder.id)
+    
   end
 end

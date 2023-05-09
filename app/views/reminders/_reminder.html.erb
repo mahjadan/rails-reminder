@@ -1,22 +1,13 @@
-<div id="<%= dom_id reminder %>">
-  <li  class="list-unstyled">
-    <%= link_to edit_reminder_path(reminder),data:{ turbo_frame: "modal-frame"} do %>
-      <div class="card">
-        <div class="card-body">
-          <p>
-            <h1>
-              <%= format_24_hour(reminder.due_date)%>
-            </h1>
-            <h2>
-              <%= reminder.title %>
-            </h2>
-            <%= reminder.repeat_frequency %>
-          </p>
-        </div>
-      </div>
-    <% end %>
-    <p>
-      <%= button_to "Destroy this reminder", reminder, method: :delete , data: { turbo_frame: "_top" } %>
-    </p>
-  </li>
-</div>
+<li class="list-group-item d-flex justify-content-between align-items-center" id="<%= dom_id reminder %>">
+  <h2>
+    <%= format_24_hour(reminder.due_date)%>
+  </h2>
+  <h4>
+    <%= reminder.title %>
+  </h3>
+  <%= reminder.repeat_frequency %>
+  <div class="btn-group" role="group" aria-label="Reminder actions">
+    <%= button_to "Edit", edit_reminder_path(reminder), method: :get, class: "btn btn-outline-primary btn-sm", data: { turbo_frame: "modal-frame" } %>
+    <%= button_to "Delete", reminder, method: :delete , class: "btn btn-outline-primary btn-sm", data: { turbo_frame: "_top" } %>
+  </div>
+</li>
