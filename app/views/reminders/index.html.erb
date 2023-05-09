@@ -1,5 +1,4 @@
 <div class="container my-4">
-  <%= render partial: "nav", locals:{email: current_user.email}%>
   <%= render partial: "notification_list",
   locals:{notification_reminders: @notification_reminders} %>
   <div class="col-md-4">
@@ -22,7 +21,7 @@
     <div class="col-md-4">
       <div class="card shadow mb-4">
         <div class="card-header bg-primary text-white">
-          <h2 class="h5 mb-0">Today_new</h2>
+          <h2 class="h5 mb-0">Today</h2>
         </div>
         <ul class="list-group list-group-flush" id="today-reminders">
           <% if @today_reminders.present? %>
