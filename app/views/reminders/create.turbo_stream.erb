@@ -1,2 +1,3 @@
   <%= turbo_stream.append(target_div_id_for_reminder(@reminder), partial: "reminders/reminder",
       locals: {reminder: @reminder}) %>
+<%= turbo_stream.prepend "flash", partial: "layouts/flash" %>

@@ -11,11 +11,10 @@
   <body>
     <div class="container">
       <div class="row">
-        <%= render partial: "reminders/nav" %>
+        <%= render partial: "layouts/nav" %>
       </div>
-      <div class="raw">
-        <p class="notice" style="color: green"><%= notice %></p>
-        <p class="alert"><%= alert %></p>
+      <div id="flash" class="flash">
+        <%= render "layouts/flash" %>
       </div>
       <div class="row">
         <div class="col">

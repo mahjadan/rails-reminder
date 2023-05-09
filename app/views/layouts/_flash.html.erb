@@ -1,0 +1,10 @@
+<% flash.each do |key, message| %>
+  <div
+    data-controller="removals"
+    data-action="animationend->removals#remove"
+    class="alert <%= flash_class(key) %> alert-dismissible fade
+    show text-center" role="alert"
+    style="animation: appear-then-fade 4s both;">
+    <%= message %>
+  </div>
+<% end %>

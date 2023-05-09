@@ -7,3 +7,4 @@
 ), partial: "reminders/reminder",
       locals: {reminder: @reminder
 }) %>
+<%= turbo_stream.prepend "flash", partial: "layouts/flash" %>
