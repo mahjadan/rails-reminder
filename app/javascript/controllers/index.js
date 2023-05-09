@@ -4,11 +4,11 @@
 
 import { application } from "./application"
 
-import HelloController from "./hello_controller"
-application.register("hello", HelloController)
-
 import ReminderController from "./reminder_controller"
 application.register("reminder", ReminderController)
+
+import RemovalsController from "./removals_controller"
+application.register("removals", RemovalsController)
 
 import TurbomodalController from "./turbomodal_controller"
 application.register("turbomodal", TurbomodalController)
