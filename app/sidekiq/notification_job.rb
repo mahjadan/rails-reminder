@@ -3,15 +3,12 @@ class NotificationJob
 
   def perform(reminder_id)
     puts "run notification_job with args: ' + #{reminder_id}"
-    reminder = Reminder.find(reminder_id)
-
-    # check if the reminder has been updated/done 
-    # for now let's send notifcation
-    send_user_notification(reminder)
-
-    true
-  rescue
-    false
+    reminder = Reminder.find_by(id: reminder_id)
+    if reminder.nil?
+      # check if the reminder has been updated/done
+      # for now let's send notifcation
+      send_user_notification(reminder)
+    end
   end
 
   private
