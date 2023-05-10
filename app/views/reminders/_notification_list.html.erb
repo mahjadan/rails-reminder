@@ -1,0 +1,20 @@
+<% if user_signed_in? %>
+  <%= turbo_stream_from "reminders-stream-#{current_user.id}" %>
+  <div id="user-notifications" data-user-id=<%= current_user.id %>>
+  </div>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card mb-3">
+        <div class="card-header">
+          <h2 class="h6 mb-0">Notifications</h2>
+        </div>
+        <%= turbo_frame_tag "notifications_div" do %>
+          <% notification_reminders.each do |reminder| %>
+            <%= render partial: "reminders/notification", locals:{reminder: reminder} %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
