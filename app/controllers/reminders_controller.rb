@@ -27,9 +27,30 @@ class RemindersController < ApplicationController
   def edit; end
 
   # POST /reminders or /reminders.json
+  # def create
+  #   @reminder = Reminder.new(reminder_params)
+  #   notification = Notification.new(user:current_user, due_date: @reminder.due_date)
+  #   respond_to do |format|
+  #     if notification.save # Save the notification instance to the database
+  #       @reminder.notification = notification
+  #       @reminder.user = current_user
+  #       puts "****notificaiont : #{notification.id}"
+  #       puts "****notificaiont : #{notification.due_date}"
+  #       puts "****notificaiont : #{notification.user.id}"
+  #       if @reminder.save
+  #         ReminderJob.perform_async(@reminder.id)
+  #         format.turbo_stream { flash.now[:notice] = "Reminder was successfully created." }
+  #       else
+  #         format.html { render :new, status: :unprocessable_entity }
+  #       end
+  #     else
+  #       puts "****notificaiont : #{notification.errors.full_messages}"
+  #       format.html { render :new, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
   def create
-    @reminder = Reminder.new(reminder_params)
-    @reminder.user = current_user
+    @reminder = current_user.reminders.build(reminder_params)
 
     respond_to do |format|
       if @reminder.save
@@ -40,6 +61,7 @@ class RemindersController < ApplicationController
       end
     end
   end
+
 
   # PATCH/PUT /reminders/1 or /reminders/1.json
   def update
@@ -89,16 +111,16 @@ class RemindersController < ApplicationController
 
   # POST /reminders/1/complete
   def complete
-    @reminder = Reminder.find(params[:id])
+    # @reminder = Reminder.find(params[:id])
 
-    respond_to do |format|
-      if @reminder.update_attribute('complete', true)
-        format.turbo_stream { flash.now[:notice] = "Reminder was successfully completed." }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @reminder.errors, status: :unprocessable_entity }
-      end
-    end
+    # respond_to do |format|
+    #   if @reminder.update_attribute('complete', true)
+    #     format.turbo_stream { flash.now[:notice] = "Reminder was successfully completed." }
+    #   else
+    #     format.html { render :edit, status: :unprocessable_entity }
+    #     format.json { render json: @reminder.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   # GET /reminders/1/snooze

@@ -10,7 +10,7 @@
         </div>
         <%= turbo_frame_tag "notifications_div" do %>
           <% notification_reminders.each do |reminder| %>
-            <%= render partial: "reminders/notification", locals:{reminder: reminder} %>
+            <%= render partial: "reminders/notification", locals:{reminder: reminder, notification:reminder.notification} %>
           <% end %>
         <% end %>
       </div>
