@@ -17,6 +17,6 @@ class NotificationJob
     puts "calling notify_user : #{notification}"
     puts "notifying to this channel : notification_channel_#{notification.user.id}"
     # broadcast message to the NotificationChannel check -> app/channels/notification_channel.rb
-    ActionCable.server.broadcast "notification_channel_#{notification.user.id}", {reminder: notification.reminder, notification: notification}
+    ActionCable.server.broadcast "notification_channel_#{notification.user.id}", { notification: notification}
   end
 end

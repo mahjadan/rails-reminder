@@ -1,34 +1,32 @@
-<div id="<%= dom_id(reminder, :notification) %>">
+<div id="<%= dom_id(notification, :notification) %>">
   <div class="card-body">
     <div class="list-group">
       <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
         <div>
-          <%= link_to edit_reminder_path(reminder), data: { turbo_frame: "modal-frame" }, style:"text-decoration: none;" do %>
-            <h3 class="h6 mb-0">
-              <%= format_24_hour(reminder.due_date) %>
-            </h3>
-            <small class="text-muted">
-              <%= reminder.title %>
-            </small>
-            <small class="text-muted">
-              <% if notification   %>
-                <%= notification.id %>
-              <%end%>
-            </small>
-            <% if Reminder.repeat_frequencies[reminder.repeat_frequency] != Reminder.repeat_frequencies[:no_repeat]%>
-              <span class="badge bg-secondary rounded-pill">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-repeat" viewBox="0 0 16 16">
-                  <path d="M11 5.466V4H5a4 4 0 0 0-3.584 5.777.5.5 0 1 1-.896.446A5 5 0 0 1 5 3h6V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192Zm3.81.086a.5.5 0 0 1 .67.225A5 5 0 0 1 11 13H5v1.466a.25.25 0 0 1-.41.192l-2.36-1.966a.25.25 0 0 1 0-.384l2.36-1.966a.25.25 0 0 1 .41.192V12h6a4 4 0 0 0 3.585-5.777.5.5 0 0 1 .225-.67Z"/>
-                </svg>
-              </span>
-            <% end %>
+          <h3 class="h6 mb-0">
+            <%= format_24_hour(notification.scheduled_at) %>
+          </h3>
+          <small class="text-muted">
+            <%= notification.reminder.title %>
+          </small>
+          <small class="text-muted">
+            <% if notification   %>
+              <%= notification.id %>
+            <%end%>
+          </small>
+          <% if Reminder.repeat_frequencies[notification.reminder.repeat_frequency] != Reminder.repeat_frequencies[:no_repeat]%>
+            <span class="badge bg-secondary rounded-pill">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-repeat" viewBox="0 0 16 16">
+                <path d="M11 5.466V4H5a4 4 0 0 0-3.584 5.777.5.5 0 1 1-.896.446A5 5 0 0 1 5 3h6V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192Zm3.81.086a.5.5 0 0 1 .67.225A5 5 0 0 1 11 13H5v1.466a.25.25 0 0 1-.41.192l-2.36-1.966a.25.25 0 0 1 0-.384l2.36-1.966a.25.25 0 0 1 .41.192V12h6a4 4 0 0 0 3.585-5.777.5.5 0 0 1 .225-.67Z"/>
+              </svg>
+            </span>
           <% end %>
         </div>
         <div class="d-flex align-items-center">
-          <%= form_with url: complete_notification_path(reminder), method: :post do |form| %>
+          <%= form_with url: complete_notification_path(notification), method: :post do |form| %>
             <%= form.submit "Complete", method: :post, data: { turbo_frame: "_top" }, authenticity_token: true, class: "btn btn-primary rounded-pill me-2" %>
           <% end %>
-          <%= link_to "Snooze", snooze_reminder_path(reminder), data: { turbo_frame: "modal-frame" }, class: "btn btn-secondary rounded-pill" %>
+          <%= link_to "Snooze", snooze_notification_path(notification), data: { turbo_frame: "modal-frame" }, class: "btn btn-secondary rounded-pill" %>
         </div>
       </div>
     </div>

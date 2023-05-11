@@ -1,7 +1,7 @@
-<%# remove from notification %>
-<%= turbo_stream.remove(dom_id(@old_reminder,:notification)) %>
+<%# remove from notifications_div %>
+<%= turbo_stream.remove(dom_id(@notification,:notification)) %>
 <%# remove if already exists in reminders list [replace does not cover one case where the reminder does not exists in the list]%>
-<%= turbo_stream.remove(@old_reminder)  %>
+<%= turbo_stream.remove(@reminder)  %>
 <%# add the new one to the list %>
 <%= turbo_stream.append(target_div_id_for_reminder(@reminder
 ), partial: "reminders/reminder",

@@ -9,8 +9,8 @@
           <h2 class="h6 mb-0">Notifications</h2>
         </div>
         <%= turbo_frame_tag "notifications_div" do %>
-          <% notification_reminders.each do |reminder| %>
-            <%= render partial: "reminders/notification", locals:{reminder: reminder, notification:reminder.notification} %>
+          <% notifications.each do |notification| %>
+            <%= render partial: "reminders/notification", locals:{notification: notification} %>
           <% end %>
         <% end %>
       </div>

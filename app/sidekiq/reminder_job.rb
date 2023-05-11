@@ -6,10 +6,10 @@ class ReminderJob
     puts "run reminder_job with args: ' + #{reminder_id}"
     reminder = Reminder.find_by(id: reminder_id)
     if reminder.present?
-      notification = Notification.new(reminder: reminder, user: reminder.user, due_date: reminder.due_date)
+      notification = Notification.new(reminder: reminder, user: reminder.user, scheduled_at: reminder.due_date)
       if notification.save
         puts "sending reminder notification id: #{notification.id}"
-        NotificationJob.perform_at(notification.due_date,notification.id)
+        NotificationJob.perform_at(notification.scheduled_at, notification.id)
       end
 
       if reminder.repeat_frequency != 'no_repeat'
