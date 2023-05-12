@@ -4,6 +4,7 @@ class RemindersController < ApplicationController
 
   # GET /reminders or /reminders.json
   def index
+    #TODO: fix list to show also reminders that their date already passed but have notifications overdue
     today = Date.current
     tomorrow = today + 1.day
     reminders = current_user.reminders.after(DateTime.now)
@@ -59,11 +60,13 @@ class RemindersController < ApplicationController
 
   # DELETE /reminders/1 or /reminders/1.json
   def destroy
-    @reminder.destroy
-
     respond_to do |format|
-      format.html { redirect_to reminders_url, notice: 'Reminder was successfully destroyed.' }
-      format.json { head :no_content }
+      if @reminder.destroy
+        format.turbo_stream { flash.now[:notice] = "Reminder was successfully deleted." }
+        format.json { head :no_content }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+      end
     end
   end
 
