@@ -36,39 +36,21 @@ class RemindersController < ApplicationController
     end
   end
 
-
   # PATCH/PUT /reminders/1 or /reminders/1.json
   def update
     @reminder.assign_attributes(reminder_params)
-    @replace = false
-
+    # track changes in the due_date and repeat_frequency fields.
+    # mark it to cancel a previously scheduled ReminderJob
+    @reminder.reconfigured = true if @reminder.due_date_changed? || @reminder.repeat_frequency_changed?
+    @replace = !(@reminder.due_date_changed? || @reminder.repeat_frequency_changed?)
+    puts "reconfigured: " + @reminder.reconfigured.to_s
     respond_to do |format|
-      if @reminder.due_date_changed? || @reminder.repeat_frequency_changed?
-        # delete and recreate just like the update_snooze process
-        @old_reminder = @reminder
-        new_due_date = @reminder.due_date
-        @reminder = Reminder.new(@old_reminder.attributes.except('id').merge(
-                                   due_date: new_due_date,
-                                   repeat_frequency: @reminder.repeat_frequency
-                                 ))
-        @reminder.user = current_user
-        if @reminder.save
-          @old_reminder.destroy
-          ReminderJob.perform_async(@reminder.id)
-          @replace = true
-          format.turbo_stream { flash.now[:notice] = "Reminder was successfully updated." }
-        else
-          format.html { render :edit, status: :unprocessable_entity }
-          format.json { render json: @reminder.errors, status: :unprocessable_entity }
-        end
+      if @reminder.save
+        ReminderJob.perform_async(@reminder.id)
+        format.turbo_stream { flash.now[:notice] = "Reminder was successfully updated." }
       else
-        # update
-        if @reminder.update(reminder_params)
-          format.turbo_stream { flash.now[:notice] = "Reminder was successfully updated." }
-        else
-          format.html { render :edit, status: :unprocessable_entity }
-          format.json { render json: @reminder.errors, status: :unprocessable_entity }
-        end
+        format.html { render :edit, status: :unprocessable_entity }
+        format.json { render json: @reminder.errors, status: :unprocessable_entity }
       end
     end
   end

@@ -5,7 +5,14 @@ class ReminderJob
 
     puts "run reminder_job with args: ' + #{reminder_id}"
     reminder = Reminder.find_by(id: reminder_id)
+
     if reminder.present?
+      # if the reminder has been reconfigured then skip the job and reset the flag
+      if reminder.reconfigured
+        puts "skipping reminder job for reminder id: #{reminder.id}"
+        reminder.update(reconfigured: false)
+        return
+      end
       notification = Notification.new(reminder: reminder, user: reminder.user, scheduled_at: reminder.due_date)
       if notification.save
         puts "sending reminder notification id: #{notification.id}"
