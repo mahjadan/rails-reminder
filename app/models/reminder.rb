@@ -5,7 +5,7 @@ class Reminder < ApplicationRecord
     enum :repeat_frequency, { no_repeat:0, daily: 1, weekly: 2, monthly: 3, yearly: 4}, default: 0
 
     belongs_to :user
-    has_one :notification, dependent: :destroy
+    has_many :notification, dependent: :destroy
 
     scope :chronological, -> { order(due_date: :asc) }
     scope :after, -> (date) { where("due_date > ?", date).chronological }

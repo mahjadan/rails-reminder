@@ -28,7 +28,7 @@ class RemindersController < ApplicationController
 
     respond_to do |format|
       if @reminder.save
-        ReminderJob.perform_async(@reminder.id)
+        ReminderJob.perform_async(@reminder.id, ReminderJob::SOURCE_CREATE)
         format.turbo_stream { flash.now[:notice] = "Reminder was successfully created." }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -46,7 +46,9 @@ class RemindersController < ApplicationController
     puts "reconfigured: " + @reminder.reconfigured.to_s
     respond_to do |format|
       if @reminder.save
-        ReminderJob.perform_async(@reminder.id)
+        # skip_check = true to skip the check for reconfigured flag, because we want the check to only happen on
+        # already scheduled ReminderJob
+        ReminderJob.perform_async(@reminder.id, ReminderJob::SOURCE_UPDATE,skip_check = true)
         format.turbo_stream { flash.now[:notice] = "Reminder was successfully updated." }
       else
         format.html { render :edit, status: :unprocessable_entity }

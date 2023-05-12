@@ -1,4 +1,4 @@
-<%=turbo_stream.remove(dom_id(@reminder.notification, :notification))%>
+<%=turbo_stream.remove(dom_id(@notification, :notification))%>
 <% if @destroy == true %>
   <%= turbo_stream.remove(@reminder)%>
 <% end %>
