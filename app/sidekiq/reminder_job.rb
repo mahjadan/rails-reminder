@@ -7,14 +7,14 @@ class ReminderJob
 
   def perform(reminder_id, source)
 
-    puts "run reminder_job with args: ' + #{reminder_id}"
+    puts "run reminder_job with args: ' + #{reminder_id}, source: #{source}"
     reminder = Reminder.find_by(id: reminder_id)
 
     if reminder.present?
       # if the reminder has been reconfigured on Update, then skip the job and reset the flag
-      if SOURCE_SCHEDULER &&  reminder.reconfigured
+      if source == SOURCE_SCHEDULER &&  reminder.reconfigured
         puts "skipping reminder job for reminder id: #{reminder.id}"
-        reminder.update(reconfigured: false)
+        reminder.update_attribute('reconfigured', false)
         return
       end
 
