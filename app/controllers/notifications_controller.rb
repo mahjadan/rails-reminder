@@ -1,5 +1,13 @@
 class NotificationsController < ApplicationController
   before_action :set_notification, only: %i[complete update_snooze snooze]
+
+  # POST /notifications/:id/complete
+  # Purpose: Marks a notification as completed and handles the associated reminder.
+  # URL: POST /notifications/:id/complete
+  # Request Format: HTML
+  # Parameters:
+  #   - :id (required) - The ID of the notification to be completed.
+  # Response Format: Turbo Stream (if successful) or HTML (if there are errors)
   def complete
     @reminder = @notification.reminder
     @destroy = false
@@ -11,7 +19,6 @@ class NotificationsController < ApplicationController
           format.turbo_stream { flash.now[:notice] = "Reminder was successfully completed." }
         else
           format.html { render :edit, status: :unprocessable_entity }
-          format.json { render json: @reminder.errors, status: :unprocessable_entity }
         end
       else
         # reminder does not have frequency, delete the whole reminder
@@ -23,15 +30,26 @@ class NotificationsController < ApplicationController
     end
   end
 
-  def snooze
-    # already using set_reminder
-  end
+  # GET /notifications/:id/snooze
+  # Purpose: Displays the snooze form for a notification.
+  # URL: GET /notifications/:id/snooze
+  # Request Format: HTML
+  # Parameters:
+  #   - :id (required) - The ID of the notification for which to display the snooze form.
+  # Response Format: HTML
+  def snooze; end
 
+  # POST /notifications/:id/update_snooze
+  # Purpose: To updates the snooze duration for a notification.
+  # - delete the existing notification
+  # - let the reminderJob creates a new notification with the new due_date
+  # URL: POST /notifications/:id/update_snooze
+  # Request Format: HTML
+  # Parameters:
+  #   - :id (required) - The ID of the notification to be snoozed.
+  #   - :minutes (required) - The new snooze duration in minutes.
+  # Response Format: Turbo Stream (if successful) or HTML (if there are errors)
   def update_snooze
-    # delete the existing notification
-    # let the reminderJob create a notification with the new due_date
-    puts "SNOOZE POST params #{params}"
-    puts "mintues: #{params[:minutes].to_i}"
     @notification = Notification.find(params[:id])
     @reminder = @notification.reminder
 

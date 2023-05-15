@@ -1,5 +1,5 @@
 <%= turbo_stream.remove(dom_id(@reminder)) %>
-<% @reminder.notifications.each do |notification| %>
+<% @reminder.notification.each do |notification| %>
   <%= turbo_stream.remove(dom_id(notification, :notification)) %>
 <% end %>
 <%= turbo_stream.prepend "flash", partial: "layouts/flash" %>

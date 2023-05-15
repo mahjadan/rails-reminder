@@ -4,17 +4,15 @@ class ReminderJob
   SOURCE_CREATE = 'create'.freeze
   SOURCE_UPDATE = 'update'.freeze
   SOURCE_SCHEDULER = 'scheduler'.freeze
-  # @param [String] reminder_id
-  # @param [Boolean] skip_check - if true then skip the check for reconfigured flag
-  # @return [Boolean] true if the job is scheduled
-  def perform(reminder_id, source, skip_check=false)
+
+  def perform(reminder_id, source)
 
     puts "run reminder_job with args: ' + #{reminder_id}"
     reminder = Reminder.find_by(id: reminder_id)
 
     if reminder.present?
-      # if the reminder has been reconfigured then skip the job and reset the flag
-      if !skip_check &&  reminder.reconfigured
+      # if the reminder has been reconfigured on Update, then skip the job and reset the flag
+      if SOURCE_SCHEDULER &&  reminder.reconfigured
         puts "skipping reminder job for reminder id: #{reminder.id}"
         reminder.update(reconfigured: false)
         return
