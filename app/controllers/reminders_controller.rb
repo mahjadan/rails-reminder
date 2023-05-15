@@ -4,13 +4,14 @@ class RemindersController < ApplicationController
 
   # GET /reminders or /reminders.json
   def index
-    #TODO: fix list to show also reminders that their date already passed but have notifications overdue
     today = Date.current
     tomorrow = today + 1.day
     reminders = current_user.reminders.after(DateTime.now)
     @today_reminders = reminders.select { |r| r.due_date.to_date == today }
     @tomorrow_reminders = reminders.select { |r| r.due_date.to_date == tomorrow }
     @upcoming_reminders = reminders.reject { |r| [today, tomorrow].include?(r.due_date.to_date) }
+    @missed_reminders = current_user.reminders.before(DateTime.now)
+
     # create vaiable notification_reminders to list all past due reminders that are not completed of the current_user and send it to the view
     # @notification_reminders = current_user.reminders.before(DateTime.now)
     @notifications = current_user.notifications.overdue
