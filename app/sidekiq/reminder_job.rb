@@ -6,7 +6,6 @@ class ReminderJob
   SOURCE_SCHEDULER = 'scheduler'.freeze
 
   def perform(reminder_id, source)
-
     puts "run reminder_job with args: ' + #{reminder_id}, source: #{source}"
     reminder = Reminder.find_by(id: reminder_id)
 
@@ -19,7 +18,7 @@ class ReminderJob
       end
 
       # don't create notification if user has already been notified
-      notification = reminder.notification.pending.find_by(scheduled_at: reminder.due_date)
+      notification = reminder.notifications.pending.find_by(scheduled_at: reminder.due_date)
       puts "find by result #{notification}"
       if notification.nil?
         notification = Notification.new(reminder: reminder, user: reminder.user, scheduled_at: reminder.due_date)
@@ -31,7 +30,6 @@ class ReminderJob
 
       if reminder.repeat_frequency != 'no_repeat'
         puts "******schedualing job to #{reminder.repeat_frequency}"
-        # due_date = calculate_next_due_date(reminder.repeat_frequency, reminder.due_date)
         due_date = calculate_due_date(reminder, source)
         reminder.update(due_date: due_date)
         reschedual_reminder(reminder.id, due_date)
