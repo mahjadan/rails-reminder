@@ -4,10 +4,14 @@ RSpec.describe ReminderJob, type: :job do
   describe '#perform' do
     let(:reminder) { FactoryBot.create(:reminder) }
     let(:notification) { FactoryBot.create(:notification) }
+
+    before do
+      allow(Reminder).to receive(:find_by).with(id: reminder.id).and_return(reminder)
+    end
+    
     context 'when the reminder exists' do
       context 'when the reminder has no pending notifications' do
         it 'creates a new notification for the reminder' do
-          expect(Reminder).to receive(:find_by).with(id: reminder.id).and_return(reminder)
           expect(Notification).to receive(:new).and_return(FactoryBot.build(:notification))
           expect_any_instance_of(Notification).to receive(:save).and_return(true)
           expect(NotificationJob).to receive(:perform_at)
@@ -16,15 +20,13 @@ RSpec.describe ReminderJob, type: :job do
       end
 
       context "when the reminder has pending notification" do
-        let(:reminder_with_pending) { FactoryBot.create(:reminder) }
-        let(:pending_notification) { FactoryBot.create(:notification, reminder: reminder_with_pending, scheduled_at: reminder_with_pending.due_date) }
+        let(:pending_notification) { FactoryBot.create(:notification, reminder: reminder, scheduled_at: reminder.due_date) }
         before do
-          reminder_with_pending.notifications << pending_notification
+          reminder.notifications << pending_notification
         end
         it 'does not create a new notification if a pending notification already exists for the reminder' do
-          expect(Reminder).to receive(:find_by).with(id: reminder_with_pending.id).and_return(reminder_with_pending)
           expect(Notification).not_to receive(:new)
-          ReminderJob.new.perform(reminder_with_pending.id, 'scheduler')
+          ReminderJob.new.perform(reminder.id, ReminderJob::SOURCE_CREATE)
         end
       end
 
@@ -57,16 +59,16 @@ RSpec.describe ReminderJob, type: :job do
         end
       end
 
-      it 'does not schedule a new job if the reminder does not have a repeat frequency' do
-        reminder.update(repeat_frequency: 'no_repeat')
-        expect(Reminder).to receive(:find_by).with(id: reminder.id).and_return(reminder)
-        expect(ReminderJob).not_to receive(:perform_at)
-        ReminderJob.new.perform(reminder.id, 'scheduler')
+      context 'when reminder has No repeat frequency' do
+        it 'does not schedule a new job' do
+          reminder.update(repeat_frequency: 'no_repeat')
+          expect(Reminder).to receive(:find_by).with(id: reminder.id).and_return(reminder)
+          expect(ReminderJob).not_to receive(:perform_at)
+          ReminderJob.new.perform(reminder.id, 'scheduler')
+        end
       end
 
       context "when called with SOURCE_SCHEDULER" do
-          # let(:notification) {  }
-        # let(:reminder) { FactoryBot.create(:reminder) }
         before do
           reminder.notifications << notification
           reminder.save
