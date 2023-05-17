@@ -12,9 +12,9 @@ class NotificationsController < ApplicationController
     @reminder = @notification.reminder
     @destroy = false
     respond_to do |format|
-      if @reminder.repeat_frequency != 'no_repeat'
+      if @reminder.repeat_frequency != "no_repeat"
         # marke this notification as completed, because the reminder has frequency
-        if @notification.update_attribute('completed_at', DateTime.now)
+        if @notification.update_attribute("completed_at", DateTime.now)
           # we need to delete the notification from the div only
           format.turbo_stream { flash.now[:notice] = "Reminder was successfully completed." }
         else
@@ -37,7 +37,8 @@ class NotificationsController < ApplicationController
   # Parameters:
   #   - :id (required) - The ID of the notification for which to display the snooze form.
   # Response Format: HTML
-  def snooze; end
+  def snooze
+  end
 
   # POST /notifications/:id/update_snooze
   # Purpose: To updates the snooze duration for a notification.
@@ -54,8 +55,8 @@ class NotificationsController < ApplicationController
     @reminder = @notification.reminder
 
     respond_to do |format|
-      if @notification.delete
-        SnoozeJob.perform_async(@reminder.id, new_schedule_date.to_s)
+      if @notification.update(scheduled_at: new_schedule_date)
+        SnoozeJob.perform_async(@notification.id)
         format.turbo_stream { flash.now[:notice] = "Reminder was successfully snoozed." }
       else
         format.html { render :snooze, status: :unprocessable_entity }
@@ -64,9 +65,11 @@ class NotificationsController < ApplicationController
   end
 
   private
+
   def new_schedule_date
     DateTime.now + params[:minutes].to_i.minutes
   end
+
   def set_notification
     @notification = Notification.find(params[:id])
   end
