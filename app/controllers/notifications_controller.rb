@@ -4,7 +4,7 @@ class NotificationsController < ApplicationController
   # POST /notifications/:id/complete
   # Purpose: Marks a notification as completed and handles the associated reminder.
   # URL: POST /notifications/:id/complete
-  # Request Format: HTML
+  # Request Format: turbo_stream
   # Parameters:
   #   - :id (required) - The ID of the notification to be completed.
   # Response Format: Turbo Stream (if successful) or HTML (if there are errors)
@@ -18,7 +18,7 @@ class NotificationsController < ApplicationController
           # we need to delete the notification from the div only
           format.turbo_stream { flash.now[:notice] = "Reminder was successfully completed." }
         else
-          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: {message: "Reminder was successfully completed."}, status: :unprocessable_entity }
         end
       else
         # reminder does not have frequency, delete the whole reminder
@@ -42,8 +42,6 @@ class NotificationsController < ApplicationController
 
   # POST /notifications/:id/update_snooze
   # Purpose: To updates the snooze duration for a notification.
-  # - delete the existing notification
-  # - let the reminderJob creates a new notification with the new due_date
   # URL: POST /notifications/:id/update_snooze
   # Request Format: HTML
   # Parameters:
@@ -51,7 +49,6 @@ class NotificationsController < ApplicationController
   #   - :minutes (required) - The new snooze duration in minutes.
   # Response Format: Turbo Stream (if successful) or HTML (if there are errors)
   def update_snooze
-    @notification = Notification.find(params[:id])
     @reminder = @notification.reminder
 
     respond_to do |format|
@@ -71,6 +68,14 @@ class NotificationsController < ApplicationController
   end
 
   def set_notification
-    @notification = Notification.find(params[:id])
+    @notification = Notification.find_by(id: params[:id])
+    render_not_found if @notification.nil?
+  end
+
+  def render_not_found
+    respond_to do |format|
+      format.html { render file: "#{Rails.public_path}/404.html", status: :not_found, layout: false }
+      format.json { render json: {error: "Notification not found"}, status: :not_found }
+    end
   end
 end
