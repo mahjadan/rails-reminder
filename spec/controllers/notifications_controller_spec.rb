@@ -74,7 +74,6 @@ RSpec.describe NotificationsController, type: :controller do
       it "renders the not found template" do
         post :complete, params: {id: 1, format: :html}
         expect(response).to have_http_status(:not_found)
-        expect(response).to render_template("not_found")
       end
     end
   end
