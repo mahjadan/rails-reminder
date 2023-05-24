@@ -1,6 +1,6 @@
 # Make sure it matches the Ruby version in .ruby-version and Gemfile
 ARG RUBY_VERSION=3.1.1
-FROM ruby:$RUBY_VERSION
+FROM ruby:$RUBY_VERSION as builder
 
 # Install libvips for Active Storage preview support
 RUN apt-get update -qq && \
@@ -36,8 +36,24 @@ RUN bundle exec bootsnap precompile --gemfile app/ lib/
 RUN npm install --global yarn
 RUN yarn config set ignore-engines true
 
-RUN SECRET_KEY_BASE_DUMMY=1 /rails/bin/bundle exec rails assets:precompile
+RUN SECRET_KEY_BASE=1 /rails/bin/bundle exec rails assets:precompile
 
+# Run stage
+FROM ruby:3.1.1-alpine
+ARG RAILS_ROOT=/rails
+ARG PACKAGES="tzdata postgresql-client nodejs bash"
+
+ENV RAILS_ENV=production
+ENV BUNDLE_APP_CONFIG="$RAILS_ROOT/.bundle"
+
+WORKDIR $RAILS_ROOT
+
+# install packages
+RUN apk update \
+    && apk upgrade \
+    && apk add --update --no-cache $PACKAGES
+
+COPY --from=builder $RAILS_ROOT $RAILS_ROOT
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
