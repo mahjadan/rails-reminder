@@ -4,7 +4,7 @@ FROM ruby:$RUBY_VERSION
 
 # Install libvips for Active Storage preview support
 RUN apt-get update -qq && \
-    apt-get install -y build-essential libpq-dev libvips bash bash-completion libffi-dev tzdata postgresql nodejs npm yarn && \
+    apt-get install -y build-essential libpq-dev libvips bash bash-completion libffi-dev tzdata postgresql nodejs npm && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man
 
@@ -32,8 +32,11 @@ RUN bundle exec bootsnap precompile --gemfile app/ lib/
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
 # precomiles assets and then deletes the dummy key
 # RUN SECRET_KEY_BASE_DUMMY=1 /rails/bin/bundle exec rails assets:precompile
- 
-# RUN SECRET_KEY_BASE_DUMMY=1 /rails/bin/bundle exec rails assets:precompile
+# RUN node -v
+RUN npm install --global yarn
+RUN yarn config set ignore-engines true
+
+RUN SECRET_KEY_BASE_DUMMY=1 /rails/bin/bundle exec rails assets:precompile
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
