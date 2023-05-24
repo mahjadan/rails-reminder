@@ -1,0 +1,5 @@
+<%=turbo_stream.remove(dom_id(@notification, :notification))%>
+<% if @destroy == true %>
+  <%= turbo_stream.remove(@reminder)%>
+<% end %>
+<%= turbo_stream.prepend "flash", partial: "layouts/flash" %>

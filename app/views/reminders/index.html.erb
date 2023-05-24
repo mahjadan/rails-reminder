@@ -1,6 +1,6 @@
 <div class="container my-4">
   <%= render partial: "notification_list",
-  locals:{notification_reminders: @notification_reminders} %>
+  locals:{notifications: @notifications} %>
   <div class="col-md-4">
     <div class="card mb-3">
       <div class="card-body">
@@ -60,3 +60,19 @@
         </ul>
       </div>
     </div>
+    <div class="col-md-4">
+      <div class="card shadow mb-4">
+        <div class="card-header bg-info text-white">
+          <h2 class="h5 mb-0">Missed</h2>
+        </div>
+        <ul class="list-group list-group-flush" id="upcoming-reminders">
+          <% if @missed_reminders.present? %>
+            <% @missed_reminders.each do |reminder| %>
+              <%= render partial: "reminder", locals: {reminder: reminder} %>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,16 +1,15 @@
 <% if @replace == true %>
   <%= turbo_stream.replace(
-    @old_reminder,
+    @reminder,
     partial: "reminders/reminder",
     locals: {reminder: @reminder})
     %>
-  <%= turbo_stream.remove(dom_id(@old_reminder,:notification)) %>
+  <%= turbo_stream.remove(dom_id(@reminder,:notification)) %>
 <% else %>
-  <%= turbo_stream.update(
-    @reminder,
+  <%= turbo_stream.remove(dom_id(@reminder)) %>
+  <%= turbo_stream.append(target_div_id_for_reminder(@reminder),
     partial: "reminders/reminder",
-    locals: { reminder: @reminder }
-  )
- %>
+    locals: {reminder: @reminder})
+  %>
 <% end %>
 <%= turbo_stream.prepend "flash", partial: "layouts/flash" %>

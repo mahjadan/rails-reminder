@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_18_121637) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_12_224420) do
+  create_table "notifications", force: :cascade do |t|
+    t.datetime "scheduled_at"
+    t.integer "user_id", null: false
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "reminder_id"
+    t.index ["reminder_id"], name: "index_notifications_on_reminder_id"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
   create_table "reminders", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -19,7 +30,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_18_121637) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "user_id"
-    t.boolean "complete", default: false, null: false
+    t.boolean "reconfigured", default: false, null: false
     t.index ["repeat_frequency"], name: "index_reminders_on_repeat_frequency"
   end
 
@@ -35,4 +46,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_18_121637) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "notifications", "reminders"
+  add_foreign_key "notifications", "users"
 end

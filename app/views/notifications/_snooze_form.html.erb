@@ -1,0 +1,30 @@
+<% if notification.errors.any? %>
+  <div style="color: red">
+    <h2><%= pluralize(notification.errors.count, "error") %> prohibited this reminder from being saved:</h2>
+    <ul>
+      <% notification.errors.each do |error| %>
+        <li><%= error.full_message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+<%= form_tag(update_snooze_notification_path(notification), method: :post) do %>
+  <%= hidden_field_tag :minutes, 5 %>
+  <%= button_tag '5 minutes', class: 'form-control' %>
+<% end %>
+<%= form_tag(update_snooze_notification_path(notification), method: :post) do %>
+  <%= hidden_field_tag :minutes, 10 %>
+  <%= button_tag '10 minutes', class: 'form-control' %>
+<% end %>
+<%= form_tag(update_snooze_notification_path(notification), method: :post) do %>
+  <%= hidden_field_tag :minutes, 30 %>
+  <%= button_tag '30 minutes', class: 'form-control' %>
+<% end %>
+<%= form_tag(update_snooze_notification_path(notification), method: :post) do %>
+  <%= hidden_field_tag :minutes, 45 %>
+  <%= button_tag '45 minutes', class: 'form-control' %>
+<% end %>
+<%= form_tag(update_snooze_notification_path(notification), method: :post) do %>
+  <%= hidden_field_tag :minutes, 60 %>
+  <%= button_tag '1 hour', class: 'form-control' %>
+<% end %>
