@@ -1,6 +1,7 @@
 # Make sure it matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=3.1.1
-FROM ruby:$RUBY_VERSION as builder
+# ARG RUBY_VERSION=3.1.1
+# FROM ruby:$RUBY_VERSION as builder
+FROM ruby:3.1.1-slim-bullseye as builder
 
 # Install libvips for Active Storage preview support
 RUN apt-get update -qq && \
@@ -16,12 +17,19 @@ WORKDIR /rails
 ENV RAILS_LOG_TO_STDOUT="1" \
     RAILS_SERVE_STATIC_FILES="true" \
     RAILS_ENV="production" \
-    BUNDLE_WITHOUT="development"
+    BUNDLE_WITHOUT="development test" \
+    BUNDLE_PATH='vendor/bundle'
+
+ENV BUNDLER_VERSION='2.4.10'
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
 
-RUN gem install bundler
+RUN npm install --global yarn
+RUN yarn config set ignore-engines true
+
+RUN gem install bundler -v 2.4.10
+RUN bundle config set --local path 'vendor'
 RUN bundle install
 
 # Copy application code
@@ -33,29 +41,30 @@ RUN bundle exec bootsnap precompile --gemfile app/ lib/
 
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
 # precomiles assets and then deletes the dummy key
-# RUN SECRET_KEY_BASE_DUMMY=1 /rails/bin/bundle exec rails assets:precompile
-# RUN node -v
-RUN npm install --global yarn
-RUN yarn config set ignore-engines true
 
 RUN SECRET_KEY_BASE=1 /rails/bin/bundle exec rails assets:precompile
 
 # Run stage
-FROM ruby:3.1.1-alpine
-ARG RAILS_ROOT=/rails
-ARG PACKAGES="tzdata postgresql-client nodejs bash"
+# FROM ruby:3.1.1-alpine3.14
+# ARG RAILS_ROOT=/rails
+# ARG PACKAGES="tzdata postgresql-client libpq nodejs bash"
 
-ENV RAILS_ENV=production
-ENV BUNDLE_APP_CONFIG="$RAILS_ROOT/.bundle"
 
-WORKDIR $RAILS_ROOT
+# ENV RAILS_ENV="production" \
+#    BUNDLE_PATH='vendor/bundle' \
+#    RAILS_LOG_TO_STDOUT=true \
+# WORKDIR $RAILS_ROOT
 
-# install packages
-RUN apk update \
-    && apk upgrade \
-    && apk add --update --no-cache $PACKAGES
+# # install packages
+# RUN apk update \
+#     && apk upgrade \
+#     && apk add --update --no-cache $PACKAGES
 
-COPY --from=builder $RAILS_ROOT $RAILS_ROOT
+# # RUN bundle config set --local path 'vendor'
+
+# COPY --from=builder $RAILS_ROOT $RAILS_ROOT
+# COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
+
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
