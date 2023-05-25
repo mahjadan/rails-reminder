@@ -3,6 +3,9 @@
 
 Rails Reminder is a web application that allows users to create, update, and receive notifications for reminders. Users can easily manage their reminders and snooze them as needed. The application utilizes various technologies and frameworks, including Rails 7, Action Cable, Stimulus, Redis, Sidekiq job processing, Postgres database, and Turbo Streams.
 
+
+## Demo 
+you can access this [link](https://reminder.masjidsinfo.com) to try it. 
 ## Features
 
 - **Reminder Management:** Users can create new reminders, update existing ones, and delete reminders they no longer need. The application provides a user-friendly interface for managing reminders efficiently.
