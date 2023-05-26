@@ -52,7 +52,8 @@ class NotificationsController < ApplicationController
     @reminder = @notification.reminder
 
     respond_to do |format|
-      if @notification.update(scheduled_at: new_schedule_date)
+      if @reminder.update(due_date: new_schedule_date, reconfigured: true)
+        @notification.update(scheduled_at: new_schedule_date)
         SnoozeJob.perform_async(@notification.id)
         format.turbo_stream { flash.now[:notice] = "Reminder was successfully snoozed." }
       else
