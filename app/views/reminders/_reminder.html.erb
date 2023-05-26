@@ -12,12 +12,6 @@
       </svg>
     </span>
   <% end %>
-        <%# <% if !reminder.notifications.upcoming.count %>
-      <span class="badge bg-secondary rounded-pill">
-      <%= reminder.notifications.upcoming.count %>
-      </span>
-      <%# end %>
-
   <div class="btn-group" role="group" aria-label="Reminder actions">
     <%= button_to "Edit", edit_reminder_path(reminder), method: :get, class: "btn btn-outline-primary btn-sm", data: { turbo_frame: "modal-frame" } %>
     <%= button_to "Delete", reminder, method: :delete , class: "btn btn-outline-primary btn-sm", data: { turbo_frame: "_top" } %>
