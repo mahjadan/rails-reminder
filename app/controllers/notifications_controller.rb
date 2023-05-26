@@ -12,7 +12,7 @@ class NotificationsController < ApplicationController
     @reminder = @notification.reminder
     @destroy = false
     respond_to do |format|
-      if @reminder.repeat_frequency != "no_repeat"
+      if @reminder.repeatable?
         # marke this notification as completed, because the reminder has frequency
         if @notification.update_attribute("completed_at", DateTime.now)
           # we need to delete the notification from the div only
@@ -52,9 +52,12 @@ class NotificationsController < ApplicationController
     @reminder = @notification.reminder
 
     respond_to do |format|
-      if @reminder.update(due_date: new_schedule_date, reconfigured: true)
-        @notification.update(scheduled_at: new_schedule_date)
+      if @notification.update(scheduled_at: new_schedule_date)
         SnoozeJob.perform_async(@notification.id)
+        if @reminder.not_repeatable?
+          # updating the reminder to be listed in today list.
+          @reminder.update(due_date: new_schedule_date)
+        end
         format.turbo_stream { flash.now[:notice] = "Reminder was successfully snoozed." }
       else
         format.html { render :snooze, status: :unprocessable_entity }

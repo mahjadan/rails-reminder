@@ -35,6 +35,12 @@ RSpec.describe Notification, type: :model do
         expect(Notification.overdue).to eq([overdue_notification])
       end
     end
+
+    describe '.upcoming' do
+      it 'returns upcoming notifications' do
+        expect(Notification.upcoming).to eq([pending_notification])
+      end
+    end
   end
 
   describe 'behavior' do

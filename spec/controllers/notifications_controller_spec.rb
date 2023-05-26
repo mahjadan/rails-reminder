@@ -12,7 +12,7 @@ RSpec.describe NotificationsController, type: :controller do
 
     context "when the reminder has repeat frequency" do
       before do
-        allow(reminder).to receive(:repeat_frequency).and_return("daily")
+        allow(reminder).to receive(:repeatable?).and_return(true)
         allow(notification).to receive(:update_attribute).and_return(true)
       end
 
@@ -40,7 +40,7 @@ RSpec.describe NotificationsController, type: :controller do
 
     context "when the reminder does not have repeat frequency" do
       before do
-        allow(reminder).to receive(:repeat_frequency).and_return("no_repeat")
+        allow(reminder).to receive(:repeatable?).and_return(false)
         allow(reminder).to receive(:destroy).and_return(true)
       end
 
