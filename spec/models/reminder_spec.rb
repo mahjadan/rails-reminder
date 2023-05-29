@@ -55,5 +55,37 @@ RSpec.describe Reminder, :type => :model do
         expect(Reminder.before(tomorrow)).to eq([reminder1])
       end
     end
+
+    describe '.non_repeatable' do
+      it 'returns reminders with repeat_frequency set to "no_repeat"' do
+        repeatable_reminder = FactoryBot.create(:reminder, repeat_frequency: 'weekly')
+        non_repeatable_reminder = FactoryBot.create(:reminder, repeat_frequency: 'no_repeat')
+
+        expect(Reminder.non_repeatable).to eq([non_repeatable_reminder])
+      end
+    end
+  end
+
+  describe 'methods' do
+    describe '#repeatable?' do
+      it 'returns true if the repeat_frequency is not "no_repeat"' do
+        reminder = FactoryBot.build(:reminder, repeat_frequency: 'daily')
+        expect(reminder.repeatable?).to eq(true)
+      end
+
+      it 'returns false if the repeat_frequency is "no_repeat"' do
+        reminder = FactoryBot.build(:reminder, repeat_frequency: 'no_repeat')
+        expect(reminder.repeatable?).to eq(false)
+      end
+    end
+
+    describe '#non_repeatable' do
+      it 'returns reminders with repeat_frequency set to "no_repeat"' do
+        repeatable_reminder = FactoryBot.create(:reminder, repeat_frequency: 'weekly')
+        non_repeatable_reminder = FactoryBot.create(:reminder, repeat_frequency: 'no_repeat')
+
+        expect(Reminder.non_repeatable).to eq([non_repeatable_reminder])
+      end
+    end
   end
 end

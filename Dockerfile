@@ -29,11 +29,11 @@ COPY . .
 RUN bundle exec bootsnap precompile --gemfile app/ lib/
 
 
+RUN npm install --global yarn
+RUN yarn config set ignore-engines true
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
 # precomiles assets and then deletes the dummy key
-# RUN SECRET_KEY_BASE_DUMMY=1 /rails/bin/bundle exec rails assets:precompile
- 
-# RUN SECRET_KEY_BASE_DUMMY=1 /rails/bin/bundle exec rails assets:precompile
+RUN SECRET_KEY_BASE=1 bundle exec rails assets:precompile
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]

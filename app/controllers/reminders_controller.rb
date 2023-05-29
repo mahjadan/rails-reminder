@@ -15,7 +15,7 @@ class RemindersController < ApplicationController
     @today_reminders = reminders.select { |r| r.due_date.to_date == today }
     @tomorrow_reminders = reminders.select { |r| r.due_date.to_date == tomorrow }
     @upcoming_reminders = reminders.reject { |r| [today, tomorrow].include?(r.due_date.to_date) }
-    @missed_reminders = current_user.reminders.before(DateTime.now)
+    @missed_reminders = current_user.reminders.non_repeatable.before(DateTime.now)
     @notifications = current_user.notifications.overdue
   end
 

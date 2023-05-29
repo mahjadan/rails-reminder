@@ -28,7 +28,7 @@ class ReminderJob
         end
       end
 
-      if reminder.repeat_frequency != 'no_repeat'
+      if reminder.repeatable?
         puts "******schedualing job to #{reminder.repeat_frequency}"
         due_date = calculate_due_date(reminder, source)
         reminder.update(due_date: due_date)

@@ -8,6 +8,7 @@ class Reminder < ApplicationRecord
     has_many :notifications, dependent: :destroy
 
     scope :chronological, -> { order(due_date: :asc) }
+    scope :non_repeatable, -> { where(repeat_frequency: 0) }
     scope :after, -> (date) { where("due_date > ?", date).chronological }
     scope :before, -> (date) { where("due_date < ?", date).chronological }
 
@@ -16,4 +17,13 @@ class Reminder < ApplicationRecord
             errors.add(:due_date, 'can not be in the past')
         end
     end
+
+    def repeatable?
+        repeat_frequency != 'no_repeat'
+    end
+
+    def not_repeatable?
+        !repeatable?
+    end
+
 end
