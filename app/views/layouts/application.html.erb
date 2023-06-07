@@ -6,29 +6,37 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "custom", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
-  <body>
-    <div class="container">
-      <div class="row">
-        <%= render partial: "layouts/nav" %>
-      </div>
-      <div id="flash" class="flash" style="min-height: 58px;">
-        <%= render "layouts/flash" %>
-      </div>
-      <div class="row">
-        <div class="col">
-          <%= yield %>
+  <body >
+    <div class=" w-100 h-100 canvas">
+      <div class="circles"></div>
+    </div>
+    <div class="w-100 h-100">
+      <div class="container-fluid ">
+        <div class="row">
+          <%= render partial: "layouts/nav" %>
         </div>
-        <div
+        <div class="row">
+          <div id="flash" class="flash" style="min-height: 58px;">
+            <%= render "layouts/flash" %>
+          </div>
+        </div>
+        <div class="container">
+          <%= yield %>
+          <div
             class="modal"
             tabindex="-1"
             data-controller="turbomodal"
             data-action="turbo:frame-load->turbomodal#open turbo:submit-end->turbomodal#close"
-          >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <%= turbo_frame_tag "modal-frame" %>
+            >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <%= turbo_frame_tag "modal-frame" %>
+              </div>
             </div>
           </div>
         </div>

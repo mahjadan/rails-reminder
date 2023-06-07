@@ -1,0 +1,112 @@
+.backdrop .list-group-item {
+  opacity: 0.1;
+
+  /* background: rgba(255, 255, 255, 0.3); */
+  background-color: rgba(99, 220, 55, 0.5);
+  backdrop-filter: blur(120px);
+  -webkit-filter: blur(10px);
+  /* z-index: 2; */
+}
+.list-group-item.active {
+  z-index: 2;
+}
+.canvas {
+  position: absolute;
+  /* position: relative; */
+  /* width: 512px;
+    height: 512px; */
+  margin: auto;
+  overflow: hidden;
+  background: linear-gradient(
+    -90deg,
+    #e3e5e8 0%,
+    #ebe4e3 10%,
+    #e4e1e0 25%,
+    #e5cee9 45%,
+    #e1b2db 60%,
+    #e5a2d4 75%,
+    #e282bb 85%,
+    #e1b2db 100%
+  );
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+}
+
+.canvas::before,
+.canvas::after,
+.canvas > .circles,
+.canvas > .circles::before,
+.canvas > .circles::after {
+  filter: blur(155px);
+}
+
+.canvas::before,
+.canvas::after {
+  position: absolute;
+  content: "";
+  width: 390px;
+  height: 390px;
+  border-radius: 100%;
+}
+
+.canvas::before {
+  background: #ffecf5;
+  top: -175px;
+  left: -175px;
+  /* z-index: -1; */
+}
+
+.canvas::after {
+  background: #86e1ef;
+  right: -100px;
+  top: 50%;
+  transform: translateY(-50%);
+  /* z-index: -1; */
+}
+
+.canvas > .circles,
+.canvas > .circles::before,
+.canvas > .circles::after {
+  border-radius: 100%;
+  position: absolute;
+  /* z-index: -1; */
+}
+
+.canvas > .circles::before,
+.canvas > .circles::after {
+  content: "";
+  width: 140px;
+  height: 140px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.canvas > .circles {
+  width: 430px;
+  height: 430px;
+  background: #ffc285;
+  bottom: -60px;
+  left: 75px;
+  /* z-index: -1; */
+}
+
+.canvas > .circles::before {
+  background: #8600ff;
+  /* left: 40%; */
+  width: 330px;
+  height: 330px;
+  right: -180%;
+  top: 80%;
+  /* bottom: 0%; */
+  /* z-index: -1; */
+}
+
+.canvas > .circles::after {
+  background: #ff0000;
+  width: 430px;
+  height: 430px;
+  left: 220%;
+  top: -60%;
+  /* z-index: -1; */
+}

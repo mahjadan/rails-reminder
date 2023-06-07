@@ -2,14 +2,10 @@
   <%= render partial: "notification_list",
   locals:{notifications: @notifications} %>
   <div class="col-md-4">
-    <div class="card mb-3">
-      <div class="card-body">
-        <%= link_to "New reminder", new_reminder_path,
+    <%= link_to "New reminder", new_reminder_path,
           class: "btn btn-primary btn-lg btn-block",
           data:{turbo_frame: "modal-frame"}
         %>
-      </div>
-    </div>
   </div>
   <div class="row">
     <div class="col-md-12">
@@ -18,8 +14,8 @@
     </div>
   </div>
   <div class="row" id="reminders">
-    <div class="col-md-4">
-      <div class="card shadow mb-4">
+    <div class="col-md-4" >
+      <div class="card shadow mb-4 " >
         <div class="card-header bg-primary text-white">
           <h2 class="h5 mb-0">Today</h2>
         </div>

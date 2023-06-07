@@ -1,4 +1,4 @@
-web: unset PORT && bin/rails server
+web: unset PORT && rm -f tmp/pids/server.pid && bin/rails server
 js: yarn build --watch
 css: yarn build:css --watch
 
