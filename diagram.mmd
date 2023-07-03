@@ -1,0 +1,11 @@
+graph TD
+    User[User] -->|1. Enter Username and Password| Login(Login)
+    Login -->|2. Redirected to Index Reminders| IndexReminders(Index Reminders)
+    IndexReminders -->|3. Subscribe| TurboStreams(Turbo::Streams)
+    User -->|1. Create Reminder| IndexReminders
+    IndexReminders -->|2. Save in Database| Database(Database)
+    IndexReminders -->|3. Create Notification| Notification(Notification)
+    IndexReminders -->|4. Schedule in NotificationJob| NotificationJob(NotificationJob)
+    NotificationJob -->|5. Broadcast using ActionCable| ActionCable(ActionCable)
+    ActionCable -->|6. Receive Notifications| TurboStreams
+    TurboStreams -->|7. Show Notification| IndexReminders
